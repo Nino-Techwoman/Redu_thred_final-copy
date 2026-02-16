@@ -1498,6 +1498,10 @@ function openReplyModal(post) {
     let preview = document.getElementById('replyImagePreview');
     if (preview != null) preview.style.display = 'none';
 
+    // disable Post button until user types
+    let replySubmitBtn = document.getElementById('replySubmitBtn');
+    if (replySubmitBtn != null) replySubmitBtn.disabled = true;
+
     overlay.classList.add('active');
 
     if (replyTextarea != null) {
@@ -2452,12 +2456,15 @@ function init() {
         };
     }
 
-    // reply textarea auto-resize
+    // reply textarea auto-resize and toggle post button
     let replyTextarea = document.getElementById('replyTextarea');
     if (replyTextarea != null) {
         replyTextarea.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = this.scrollHeight + 'px';
+            if (replySubmitBtn != null) {
+                replySubmitBtn.disabled = this.value.trim().length === 0;
+            }
         });
     }
 

@@ -4893,12 +4893,14 @@ body {
     }
 
     /* Modal - full screen, slide up from bottom */
-    #modalOverlay {
+    #modalOverlay,
+    #replyModalOverlay {
         align-items: flex-end;
         background-color: rgba(0, 0, 0, 0.4);
     }
 
-    #modalOverlay .modal {
+    #modalOverlay .modal,
+    #replyModalOverlay .modal {
         max-width: 100%;
         width: 100%;
         max-height: 100vh;
@@ -4907,6 +4909,7 @@ body {
         margin: 0;
         box-shadow: none;
         animation: slideUp 0.3s ease-out;
+        padding-bottom: 68px;
     }
 
     @keyframes slideUp {
@@ -4929,8 +4932,7 @@ body {
     }
 
     .create-post-body {
-        padding: 16px;
-        flex: none;
+        padding: 16px 16px 4px 16px;
     }
 
     .create-post-avatar {
@@ -4939,11 +4941,45 @@ body {
     }
 
     .create-post-footer {
-        padding: 12px 16px;
+        padding: 6px 16px;
     }
 
     .add-to-thread {
-        padding: 10px 16px;
+        padding: 4px 16px;
+    }
+
+    #modalOverlay .modal .create-post-modal,
+    #replyModalOverlay .modal .create-post-modal {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .reply-modal-body {
+        max-height: none;
+        padding: 16px;
+        overflow-y: auto;
+    }
+
+    #modalOverlay .create-post-footer,
+    #replyModalOverlay .create-post-footer {
+        margin-top: 0;
+    }
+
+    #modalOverlay .post-btn,
+    #replyModalOverlay .post-btn {
+        border-radius: 20px;
+        padding: 8px 20px;
+        height: 36px;
+        font-size: 15px;
+    }
+
+    #modalOverlay .post-btn:disabled,
+    #replyModalOverlay .post-btn:disabled {
+        background-color: #b0b0b0;
+        color: #fff;
+        opacity: 1;
     }
 
     .more-menu-dropdown {
