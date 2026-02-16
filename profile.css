@@ -1634,6 +1634,56 @@ body {
 
     .thread-overlay {
         left: 0;
+        bottom: var(--threads-mobile-nav-height);
+    }
+
+    .thread-header {
+        padding: 12px 16px;
+        border-bottom: none;
+    }
+
+    .thread-title {
+        display: none;
+    }
+
+    .thread-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    [data-theme="dark"] .thread-logo img {
+        filter: brightness(0) invert(1);
+    }
+
+    .thread-more-btn {
+        display: none;
+    }
+
+    .thread-menu-btn {
+        display: flex;
+    }
+
+    .thread-content {
+        padding: 16px;
+    }
+
+    .thread-content .thread-post {
+        background-color: transparent;
+        border-radius: 0;
+        padding: 0;
+    }
+
+    .thread-post-image {
+        max-height: none;
+    }
+
+    [data-theme="light"] .thread-content .thread-post {
+        background-color: transparent;
+    }
+
+    [data-theme="light"] .thread-post-image {
+        border: none;
     }
 
     .modal-overlay {
@@ -2198,6 +2248,25 @@ body {
     filter: brightness(0) invert(1);
 }
 
+.thread-logo {
+    display: none;
+}
+
+.thread-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+[data-theme="light"] .thread-menu-btn {
+    color: #000;
+}
+
 .thread-content {
     padding: 20px;
     flex: 1;
@@ -2349,6 +2418,81 @@ body {
     color: #777;
 }
 
+/* Thread post-menu-dropdown base styles */
+.thread-menu-overlay {
+    display: none;
+}
+
+.thread-view .post-menu-dropdown {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background-color: #262626;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    min-width: 240px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.thread-view .post-menu-dropdown.active {
+    display: flex;
+}
+
+.thread-view .post-menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 14px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: left;
+    color: #f5f5f5;
+}
+
+.thread-view .post-menu-item:hover {
+    background-color: #363636;
+}
+
+.thread-view .post-menu-item svg {
+    color: #999;
+    flex-shrink: 0;
+}
+
+.thread-view .post-menu-item.delete {
+    color: #ff3b30;
+}
+
+.thread-view .post-menu-item.delete svg {
+    color: #ff3b30;
+}
+
+[data-theme="light"] .thread-view .post-menu-dropdown {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .thread-view .post-menu-item {
+    color: #000;
+}
+
+[data-theme="light"] .thread-view .post-menu-item:hover {
+    background-color: #F0F2F5;
+}
+
+[data-theme="light"] .thread-view .post-menu-item.delete {
+    color: #ff3b30;
+}
+
 [data-theme="light"] .thread-overlay {
     background-color: #fff;
 }
@@ -2411,6 +2555,143 @@ body {
 
 [data-theme="light"] .thread-post-image {
     border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Thread overlay mobile fix — must come after base styles */
+@media (max-width: 700px) {
+    .thread-overlay {
+        left: 0;
+        bottom: var(--threads-mobile-nav-height);
+    }
+
+    .thread-header {
+        padding: 12px 16px;
+        border-bottom: none;
+    }
+
+    .thread-title {
+        display: none;
+    }
+
+    .thread-logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    [data-theme="dark"] .thread-logo img {
+        filter: brightness(0) invert(1);
+    }
+
+    .thread-more-btn {
+        display: none;
+    }
+
+    .thread-menu-btn {
+        display: flex;
+    }
+
+    .thread-content {
+        padding: 16px;
+    }
+
+    .thread-content .thread-post {
+        background-color: transparent;
+        border-radius: 0;
+        padding: 0;
+    }
+
+    .thread-post-image {
+        max-height: none;
+    }
+
+    [data-theme="light"] .thread-content .thread-post {
+        background-color: transparent;
+    }
+
+    [data-theme="light"] .thread-post-image {
+        border: none;
+    }
+
+    /* Thread menu bottom sheet */
+    .thread-menu-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+
+    .thread-menu-overlay.active {
+        display: block;
+    }
+
+    .thread-view .post-menu-dropdown {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: auto;
+        width: 100%;
+        min-width: auto;
+        border-radius: 20px 20px 0 0;
+        border: none;
+        margin-top: 0;
+        z-index: 1001;
+        padding: 16px 12px;
+        gap: 8px;
+        background-color: #fff;
+        box-shadow: none;
+        max-height: 85vh;
+        overflow-y: auto;
+        animation: threadMenuSlideUp 0.3s ease;
+    }
+
+    [data-theme="dark"] .thread-view .post-menu-dropdown {
+        background-color: #1a1a1a;
+    }
+
+    @keyframes threadMenuSlideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+
+    .thread-view .post-menu-item {
+        padding: 16px 20px;
+        font-size: 16px;
+        color: #000;
+        background: none;
+    }
+
+    [data-theme="dark"] .thread-view .post-menu-item {
+        color: #f5f5f5;
+    }
+
+    .thread-view .post-menu-item:hover {
+        background-color: transparent;
+    }
+
+    .thread-view .post-menu-item svg {
+        color: #000;
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+    }
+
+    [data-theme="dark"] .thread-view .post-menu-item svg {
+        color: #f5f5f5;
+    }
+
+    .thread-view .post-menu-item.delete {
+        color: #ff3b30;
+    }
+
+    .thread-view .post-menu-item.delete svg {
+        color: #ff3b30;
+    }
 }
 
 /* Delete Post Confirmation Modal */
