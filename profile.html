@@ -2609,6 +2609,16 @@
             }
         }
 
+        // Sync active class on appearance buttons to match current theme
+        let allAppearanceBtns = document.querySelectorAll('.appearance-option');
+        for (let i = 0; i < allAppearanceBtns.length; i++) {
+            if (allAppearanceBtns[i].getAttribute('data-theme') === savedTheme) {
+                allAppearanceBtns[i].classList.add('active');
+            } else {
+                allAppearanceBtns[i].classList.remove('active');
+            }
+        }
+
         let currentUser = null;
 
         // get user posts from localstorage
