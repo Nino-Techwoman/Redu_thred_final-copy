@@ -700,6 +700,7 @@ function updateAuthUI() {
     let feedSelector = document.getElementById("feedSelector");
     let composer = document.getElementById("composer");
     let composerAvatar = document.getElementById("composerAvatar");
+    let authOnlyItems = document.querySelectorAll('.auth-only');
     if (isLoggedIn == true && currentUser != null) {
         if (loginBox != null) { loginBox.style.display = "none"; }
         if (tabletLoginBtn != null) { tabletLoginBtn.style.display = "none"; }
@@ -716,6 +717,9 @@ function updateAuthUI() {
         if (composerAvatar != null) { composerAvatar.src = currentUser.avatar; }
         let fab = document.getElementById("fab");
         if (fab != null) { fab.style.display = "flex"; }
+        for (let i = 0; i < authOnlyItems.length; i++) {
+            authOnlyItems[i].style.display = "";
+        }
     } else {
         if (loginBox != null) { loginBox.style.display = "block"; }
         if (tabletLoginBtn != null) { tabletLoginBtn.style.display = ""; }
@@ -726,6 +730,9 @@ function updateAuthUI() {
         if (composer != null) { composer.style.display = "none"; }
         let fab = document.getElementById("fab");
         if (fab != null) { fab.style.display = "none"; }
+        for (let i = 0; i < authOnlyItems.length; i++) {
+            authOnlyItems[i].style.display = "none";
+        }
     }
 }
 
