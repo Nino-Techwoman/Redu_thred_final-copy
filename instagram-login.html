@@ -255,13 +255,36 @@
                 passwordInput.disabled = true;
 
                 setTimeout(function() {
-                    let user = {
-                        id: Math.floor(Math.random() * 90000) + 10000,
-                        username: username,
-                        name: username,
-                        avatar: 'images/avatar' + (Math.floor(Math.random() * 5) + 1) + '.jpg'
-                    };
-                    localStorage.setItem('threads_user', JSON.stringify(user));
+                    // load registered users database
+                    let usersDb = {};
+                    try {
+                        let raw = localStorage.getItem('threads_users_db');
+                        if (raw) usersDb = JSON.parse(raw);
+                    } catch(e) {}
+
+                    // find user by username (case-insensitive)
+                    let foundUser = usersDb[username.toLowerCase()];
+
+                    if (!foundUser) {
+                        usernameError.textContent = 'Account not found. Please check your username or sign up.';
+                        loginBtn.textContent = 'Log in';
+                        loginBtn.disabled = false;
+                        usernameInput.disabled = false;
+                        passwordInput.disabled = false;
+                        return;
+                    }
+
+                    if (foundUser.password !== password) {
+                        passwordError.textContent = 'Incorrect password. Please try again.';
+                        loginBtn.textContent = 'Log in';
+                        loginBtn.disabled = false;
+                        usernameInput.disabled = false;
+                        passwordInput.disabled = false;
+                        return;
+                    }
+
+                    // login successful
+                    localStorage.setItem('threads_user', JSON.stringify(foundUser));
                     localStorage.setItem('threads_is_logged_in', 'true');
                     window.location.href = 'home.html';
                 }, 1500);

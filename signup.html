@@ -49,23 +49,35 @@
             <form class="su-form" id="suForm" novalidate>
                 <!-- Mobile / Email -->
                 <div class="su-field">
-                    <label class="su-label">Mobile number or email address</label>
+                    <label class="su-label">Mobile number</label>
                     <div class="su-input-wrapper">
-                        <input type="text" class="su-input" id="suEmail" placeholder=" " autocomplet e="email" maxlength="75" aria-label="Mobile number or email address">
-                        <label class="su-float-label" for="suEmail">Mobile number or email address</label>
+                        <input type="tel" class="su-input" id="suEmail" placeholder=" " autocomplete="tel" maxlength="20" aria-label="Mobile number">
+                        <label class="su-float-label" for="suEmail">Mobile number</label>
                     </div>
-                    <p class="su-field-note">You may receive notifications from us. <a href="#" class="su-link">Learn why we ask for your contact information</a></p>
+                    <p class="su-field-note">You may receive SMS notifications from us. <a href="#" class="su-link">Learn why we ask for your contact information</a></p>
                 </div>
 
                 <!-- Password -->
                 <div class="su-field">
                     <label class="su-label">Password</label>
                     <div class="su-input-wrapper">
-                        <input type="password" class="su-input su-input-password" id="suPassword" placeholder=" " autocomplet e="new-password" maxlength="128" aria-label="Password">
+                        <input type="password" class="su-input su-input-password" id="suPassword" placeholder=" " autocomplete="new-password" maxlength="128" aria-label="Password">
                         <label class="su-float-label" for="suPassword">Password</label>
                         <button type="button" class="su-show-password" id="suShowPassBtn" style="display:none;">Show</button>
                     </div>
-                    <div id="passwordStrength" style="margin-top:6px;font-size:12px;color:#999;"></div>
+                    <div class="su-password-feedback" id="passwordFeedback" style="display:none;">
+                        <div class="su-strength-bar-track">
+                            <div class="su-strength-bar-fill" id="strengthBarFill"></div>
+                        </div>
+                        <div class="su-strength-text" id="strengthText"></div>
+                        <ul class="su-password-rules" id="passwordRules">
+                            <li id="ruleLength"><span class="su-rule-icon"></span>At least 8 characters</li>
+                            <li id="ruleLower"><span class="su-rule-icon"></span>One lowercase letter (a-z)</li>
+                            <li id="ruleUpper"><span class="su-rule-icon"></span>One uppercase letter (A-Z)</li>
+                            <li id="ruleNumber"><span class="su-rule-icon"></span>One number (0-9)</li>
+                            <li id="ruleSpecial"><span class="su-rule-icon"></span>One special character (!@#$...)</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- Date of birth -->
@@ -191,7 +203,6 @@
             let submitBtn = document.getElementById('suSubmitBtn');
             let showPassBtn = document.getElementById('suShowPassBtn');
             let form = document.getElementById('suForm');
-            let passwordStrengthEl = document.getElementById('passwordStrength');
             let usernameErrorEl = document.getElementById('usernameError');
             let formErrorEl = document.getElementById('suFormError');
 
@@ -221,47 +232,142 @@
                 yearSelect.appendChild(opt);
             }
 
-            // password strength
-            function checkPasswordStrength(password) {
-                if (password == null || password == '') {
-                    return { score: 0, text: '', color: '' };
-                }
-                let score = 0;
-                if (password.length >= 6) score++;
-                if (password.length >= 8) score++;
-                if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
-                if (/\d/.test(password)) score++;
-                if (/[^a-zA-Z0-9]/.test(password)) score++;
+            // password elements
+            let passwordFeedback = document.getElementById('passwordFeedback');
+            let strengthBarFill = document.getElementById('strengthBarFill');
+            let strengthText = document.getElementById('strengthText');
+            let ruleLength = document.getElementById('ruleLength');
+            let ruleLower = document.getElementById('ruleLower');
+            let ruleUpper = document.getElementById('ruleUpper');
+            let ruleNumber = document.getElementById('ruleNumber');
+            let ruleSpecial = document.getElementById('ruleSpecial');
 
-                if (score <= 1) {
-                    return { score: score, text: 'Weak - use at least 6 characters with letters and numbers', color: '#ed4956' };
-                }
-                if (score <= 2) {
-                    return { score: score, text: 'Fair - try adding numbers or special characters', color: '#f5a623' };
-                }
-                if (score <= 3) {
-                    return { score: score, text: 'Good', color: '#5b9bd5' };
-                }
-                return { score: score, text: 'Strong', color: '#58c322' };
+            // check individual password rules
+            function checkPasswordRules(password) {
+                let rules = {
+                    length: password.length >= 8,
+                    lower: /[a-z]/.test(password),
+                    upper: /[A-Z]/.test(password),
+                    number: /\d/.test(password),
+                    special: /[^a-zA-Z0-9]/.test(password)
+                };
+                return rules;
             }
 
-            // check email
-            function checkEmail(val) {
-                if (val == null || val == '') {
-                    return 'Email or mobile number is required.';
+            // update rule list UI
+            function updateRuleUI(el, passed, hasInput) {
+                el.classList.remove('passed', 'failed');
+                if (hasInput) {
+                    el.classList.add(passed ? 'passed' : 'failed');
                 }
-                // if has @ then check email format
-                if (val.indexOf('@') != -1) {
-                    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailPattern.test(val)) {
-                        return 'Please enter a valid email address.';
-                    }
-                    // check domain tld
-                    let parts = val.split('@');
-                    let domain = parts[1];
-                    if (domain == null || domain == '' || domain.split('.').pop().length < 2) {
-                        return 'Please enter a valid email address.';
-                    }
+            }
+
+            // password strength score and label
+            function getPasswordStrength(rules, password) {
+                let score = 0;
+                if (rules.length) score++;
+                if (rules.lower) score++;
+                if (rules.upper) score++;
+                if (rules.number) score++;
+                if (rules.special) score++;
+                // bonus for longer passwords
+                if (password.length >= 12) score++;
+                if (password.length >= 16) score++;
+
+                let maxScore = 7;
+                let percent = Math.round((score / maxScore) * 100);
+
+                let label = '';
+                let color = '';
+                if (score <= 1) {
+                    label = 'Very weak';
+                    color = '#ed4956';
+                } else if (score <= 2) {
+                    label = 'Weak';
+                    color = '#ed4956';
+                } else if (score <= 3) {
+                    label = 'Fair';
+                    color = '#f5a623';
+                } else if (score <= 4) {
+                    label = 'Good';
+                    color = '#5b9bd5';
+                } else if (score <= 5) {
+                    label = 'Strong';
+                    color = '#58c322';
+                } else {
+                    label = 'Very strong';
+                    color = '#2d9b0a';
+                }
+
+                return { score: score, percent: percent, label: label, color: color };
+            }
+
+            // check for common weak passwords
+            function isCommonPassword(password) {
+                let common = ['password', '12345678', '123456789', 'qwerty123', 'password1', 'iloveyou', 'admin123', 'welcome1', 'abc12345', 'letmein1'];
+                return common.indexOf(password.toLowerCase()) !== -1;
+            }
+
+            // check if password contains username or name
+            function passwordContainsUserInfo(password) {
+                let pw = password.toLowerCase();
+                let name = nameInput.value.trim().toLowerCase();
+                let uname = usernameInput.value.trim().toLowerCase();
+                if (name.length >= 3 && pw.indexOf(name) !== -1) return true;
+                if (uname.length >= 3 && pw.indexOf(uname) !== -1) return true;
+                return false;
+            }
+
+            // main password update function
+            function updatePasswordFeedback() {
+                let password = passwordInput.value;
+
+                if (password.length === 0) {
+                    passwordFeedback.style.display = 'none';
+                    return;
+                }
+
+                passwordFeedback.style.display = 'block';
+
+                let rules = checkPasswordRules(password);
+                let strength = getPasswordStrength(rules, password);
+
+                // update strength bar
+                strengthBarFill.style.width = strength.percent + '%';
+                strengthBarFill.style.backgroundColor = strength.color;
+
+                // update strength text
+                let warningText = '';
+                if (isCommonPassword(password)) {
+                    warningText = ' — This is a commonly used password';
+                } else if (passwordContainsUserInfo(password)) {
+                    warningText = ' — Avoid using your name or username';
+                } else if (password.length > 0 && password.length < 6) {
+                    warningText = ' — Too short';
+                }
+                strengthText.textContent = strength.label + warningText;
+                strengthText.style.color = strength.color;
+
+                // update rule checklist
+                let hasInput = password.length > 0;
+                updateRuleUI(ruleLength, rules.length, hasInput);
+                updateRuleUI(ruleLower, rules.lower, hasInput);
+                updateRuleUI(ruleUpper, rules.upper, hasInput);
+                updateRuleUI(ruleNumber, rules.number, hasInput);
+                updateRuleUI(ruleSpecial, rules.special, hasInput);
+            }
+
+            // check phone number
+            function checkPhone(val) {
+                if (val == null || val == '') {
+                    return 'Mobile number is required.';
+                }
+                // strip spaces, dashes, parentheses for validation
+                let cleaned = val.replace(/[\s\-\(\)]/g, '');
+                // allow optional + at start, then digits only
+                let phonePattern = /^\+?\d{7,15}$/;
+                if (!phonePattern.test(cleaned)) {
+                    return 'Please enter a valid mobile number.';
                 }
                 return '';
             }
@@ -296,8 +402,8 @@
                 if (monthDiff < 0 || (monthDiff == 0 && today.getDate() < dob.getDate())) {
                     age--;
                 }
-                if (age < 13) {
-                    return 'You must be at least 13 years old to sign up.';
+                if (age < 16) {
+                    return 'You must be at least 16 years old to sign up.';
                 }
                 return '';
             }
@@ -324,20 +430,17 @@
 
             passwordInput.addEventListener('input', function() {
                 updateShowPassBtn();
-                // show strength
-                let strength = checkPasswordStrength(passwordInput.value);
-                if (passwordInput.value.length > 0) {
-                    passwordStrengthEl.textContent = strength.text;
-                    passwordStrengthEl.style.color = strength.color;
-                } else {
-                    passwordStrengthEl.textContent = '';
-                }
+                updatePasswordFeedback();
             });
 
-            // username check on input
+            // re-check when name/username changes (for "contains user info" warning)
+            nameInput.addEventListener('input', function() {
+                if (passwordInput.value.length > 0) updatePasswordFeedback();
+            });
             usernameInput.addEventListener('input', function() {
                 let err = checkUsernameField(usernameInput.value.trim());
                 usernameErrorEl.textContent = err;
+                if (passwordInput.value.length > 0) updatePasswordFeedback();
             });
 
             // DOB info tooltip
@@ -368,22 +471,48 @@
                 let month = monthSelect.value;
                 let year = yearSelect.value;
 
-                // check email
-                let emailErr = checkEmail(email);
-                if (emailErr) {
-                    formErrorEl.textContent = emailErr;
+                // check phone
+                let phoneErr = checkPhone(email);
+                if (phoneErr) {
+                    formErrorEl.textContent = phoneErr;
                     emailInput.focus();
                     return;
                 }
 
-                // check password - min 6 chars, needs letters and numbers
-                if (password.length < 6) {
-                    formErrorEl.textContent = 'Password must be at least 6 characters.';
+                // check password rules
+                let pwRules = checkPasswordRules(password);
+                if (!pwRules.length) {
+                    formErrorEl.textContent = 'Password must be at least 8 characters.';
                     passwordInput.focus();
                     return;
                 }
-                if (!/[a-zA-Z]/.test(password) || !/\d/.test(password)) {
-                    formErrorEl.textContent = 'Password must contain both letters and numbers.';
+                if (!pwRules.lower) {
+                    formErrorEl.textContent = 'Password must contain a lowercase letter.';
+                    passwordInput.focus();
+                    return;
+                }
+                if (!pwRules.upper) {
+                    formErrorEl.textContent = 'Password must contain an uppercase letter.';
+                    passwordInput.focus();
+                    return;
+                }
+                if (!pwRules.number) {
+                    formErrorEl.textContent = 'Password must contain a number.';
+                    passwordInput.focus();
+                    return;
+                }
+                if (!pwRules.special) {
+                    formErrorEl.textContent = 'Password must contain a special character.';
+                    passwordInput.focus();
+                    return;
+                }
+                if (isCommonPassword(password)) {
+                    formErrorEl.textContent = 'This password is too common. Please choose a stronger one.';
+                    passwordInput.focus();
+                    return;
+                }
+                if (passwordContainsUserInfo(password)) {
+                    formErrorEl.textContent = 'Password should not contain your name or username.';
                     passwordInput.focus();
                     return;
                 }
@@ -426,12 +555,35 @@
                 submitBtn.disabled = true;
 
                 setTimeout(function() {
+                    // load registered users database
+                    let usersDb = {};
+                    try {
+                        let raw = localStorage.getItem('threads_users_db');
+                        if (raw) usersDb = JSON.parse(raw);
+                    } catch(e) {}
+
+                    // check if username already taken
+                    if (usersDb[username.toLowerCase()]) {
+                        formErrorEl.textContent = 'Username already exists. Please choose another.';
+                        submitBtn.textContent = 'Submit';
+                        submitBtn.disabled = false;
+                        usernameInput.focus();
+                        return;
+                    }
+
+                    // create user and save to database
                     let user = {
                         id: Math.floor(Math.random() * 90000) + 10000,
                         username: username,
                         name: name,
+                        password: password,
+                        phone: email,
                         avatar: 'images/avatar' + (Math.floor(Math.random() * 5) + 1) + '.jpg'
                     };
+                    usersDb[username.toLowerCase()] = user;
+                    localStorage.setItem('threads_users_db', JSON.stringify(usersDb));
+
+                    // log the user in
                     localStorage.setItem('threads_user', JSON.stringify(user));
                     localStorage.setItem('threads_is_logged_in', 'true');
                     window.location.href = 'home.html';
