@@ -2056,13 +2056,13 @@ body {
 
 .post-toast {
     position: fixed;
-    bottom: 32px;
+    bottom: 80px;
     left: 0;
     right: 0;
     width: 100%;
     display: flex;
     justify-content: center;
-    z-index: 200;
+    z-index: 2000;
     pointer-events: none;
     opacity: 0;
     transform: translateY(100px);
