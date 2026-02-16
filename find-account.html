@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: #000;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .top-border {
+            height: 1px;
+            background: #dbdbdb;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin-left: -8px;
+            margin-bottom: 24px;
+            color: #000;
+        }
+
+        .back-btn:hover {
+            opacity: 0.6;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 24px;
+            line-height: 1.4;
+        }
+
+        .subtitle a {
+            color: #0095f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .subtitle a:hover {
+            text-decoration: underline;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 18px 16px;
+            font-size: 16px;
+            border: 1px solid #dbdbdb;
+            border-radius: 12px;
+            outline: none;
+            background: #fff;
+            color: #000;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .input-field::placeholder {
+            color: #999;
+        }
+
+        .input-field:focus {
+            border-color: #000;
+        }
+
+        .notice {
+            font-size: 13px;
+            color: #737373;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .continue-btn {
+            width: 100%;
+            padding: 16px;
+            background: #0095f6;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .continue-btn:hover {
+            background: #0081d6;
+        }
+
+        .continue-btn:disabled {
+            background: #0095f6;
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        .error-msg {
+            font-size: 14px;
+            color: #ed4956;
+            margin-bottom: 12px;
+            min-height: 20px;
+        }
+
+        .footer {
+            padding: 24px 20px;
+            text-align: center;
+            border-top: none;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 16px;
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            font-size: 13px;
+            color: #737373;
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #737373;
+        }
+
+        .language-select {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 13px;
+            color: #737373;
+            cursor: pointer;
+        }
+
+        /* Dark Mode */
+        [data-theme="dark"] body {
+            background: #000;
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .top-border {
+            background: #363636;
+        }
+
+        [data-theme="dark"] .back-btn {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] h1 {
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .subtitle {
+            color: #a8a8a8;
+        }
+
+        [data-theme="dark"] .input-field {
+            background: #000;
+            border-color: #363636;
+            color: #f5f5f5;
+        }
+
+        [data-theme="dark"] .input-field:focus {
+            border-color: #0095f6;
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+            .container {
+                max-width: 520px;
+                padding: 30px 12px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .input-field {
+                font-size: 14px;
+                padding: 16px 14px;
+            }
+
+            .continue-btn {
+                font-size: 15px;
+                padding: 14px;
+            }
+
+            .notice {
+                font-size: 12px;
+            }
+
+            .footer {
+                padding: 20px 12px;
+            }
+
+            .footer-links {
+                gap: 6px 12px;
+            }
+
+            .footer-links a {
+                font-size: 12px;
+            }
+
+            .footer-bottom {
+                font-size: 12px;
+            }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+            .container {
+                padding: 24px 12px;
+            }
+
+            .back-btn {
+                margin-bottom: 16px;
+            }
+
+            h1 {
+                font-size: 18px;
+                margin-bottom: 6px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+                margin-bottom: 20px;
+            }
+
+            .input-field {
+                padding: 14px 12px;
+                border-radius: 10px;
+            }
+
+            .continue-btn {
+                border-radius: 10px;
+            }
+        }
+    </style>
+    <script>
+        (function() {
+            let raw = localStorage.getItem('threads_theme');
+            let savedTheme = 'auto';
+            if (raw) savedTheme = JSON.parse(raw);
+            if (savedTheme == 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else if (savedTheme == 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="top-border"></div>
+
+    <div class="container">
+        <button class="back-btn" onclick="history.back()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+        </button>
+
+        <h1>Find Your Account</h1>
+        <p class="subtitle">Enter your mobile number, username or email address. <a href="forgot-password.html">Can't reset your password?</a></p>
+
+        <input type="text" class="input-field" id="findInput" placeholder="Mobile number, username or email address">
+        <p class="notice">You may receive WhatsApp and SMS notifications from us for security and login purposes.</p>
+
+        <p class="error-msg" id="errorMsg"></p>
+        <button class="continue-btn" id="continueBtn" disabled>Continue</button>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="#">Meta</a>
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+            <a href="#">Jobs</a>
+            <a href="#">Help</a>
+            <a href="#">API</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Locations</a>
+            <a href="#">Instagram Lite</a>
+            <a href="#">Contact uploading and non-users</a>
+            <a href="#">Meta Verified</a>
+        </div>
+        <div class="footer-bottom">
+            <span class="language-select">English (UK) <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+            <span>&copy; 2026 Instagram from Meta</span>
+        </div>
+    </footer>
+
+    <script src="security.js"></script>
+    <script>
+        let findInput = document.getElementById('findInput');
+        let continueBtn = document.getElementById('continueBtn');
+        let errorMsg = document.getElementById('errorMsg');
+
+        // rate limiter: 5 attempts, 30s lockout
+        let limiter = createRateLimiter(5, 30000);
+
+        // max input length
+        let MAX_INPUT_LENGTH = 100;
+
+        function showError(msg) {
+            errorMsg.textContent = msg;
+        }
+
+        function clearError() {
+            errorMsg.textContent = '';
+        }
+
+        // validate input format
+        function validateInput(val) {
+            if (val == null || val == '') {
+                return 'Please enter a username, email, or phone number.';
+            }
+            if (val.length > MAX_INPUT_LENGTH) {
+                return 'Input is too long.';
+            }
+            // check if it looks like email, username, or phone
+            let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let usernamePattern = /^[a-zA-Z0-9._]+$/;
+            let phonePattern = /^\+?[0-9\s\-()]{6,20}$/;
+            if (!emailPattern.test(val) && !usernamePattern.test(val) && !phonePattern.test(val)) {
+                return 'Please enter a valid username, email, or phone number.';
+            }
+            return '';
+        }
+
+        // find user in storage
+        function findUser(val) {
+            let sanitized = sanitize(val);
+
+            // check users array
+            // try to load users from storage, if it fails just use empty array
+            let users = [];
+            try {
+                users = JSON.parse(localStorage.getItem('threads_users')) || [];
+            } catch(e) {
+                // if JSON is broken, just use empty array
+            }
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].username == sanitized || users[i].email == sanitized) {
+                    return users[i];
+                }
+            }
+
+            // check single user
+            // try to load single user from storage
+            let singleUser = null;
+            try {
+                singleUser = JSON.parse(localStorage.getItem('threads_user'));
+            } catch(e) {
+                // if JSON is broken, just keep it null
+            }
+            if (singleUser && (singleUser.username == sanitized || singleUser.email == sanitized)) {
+                return singleUser;
+            }
+
+            return null;
+        }
+
+        // handle continue
+        function handleContinue() {
+            clearError();
+
+            // rate limit check
+            let rateCheck = limiter.check();
+            if (rateCheck.allowed == false) {
+                showError(rateCheck.message);
+                return;
+            }
+
+            let val = findInput.value.trim();
+
+            // validate
+            let validationError = validateInput(val);
+            if (validationError) {
+                showError(validationError);
+                return;
+            }
+
+            // search
+            let found = findUser(val);
+            if (found) {
+                limiter.reset();
+                localStorage.setItem('threads_found_account', JSON.stringify(found));
+                window.location.href = 'login.html';
+            } else {
+                showError('No account found with that username or email.');
+            }
+        }
+
+        // enable/disable button on input
+        findInput.addEventListener('input', function() {
+            clearError();
+            continueBtn.disabled = this.value.trim().length == 0;
+        });
+
+        // handle Enter key
+        findInput.addEventListener('keydown', function(e) {
+            if (e.key == 'Enter' && continueBtn.disabled == false) {
+                handleContinue();
+            }
+        });
+
+        continueBtn.addEventListener('click', handleContinue);
+    </script>
+</body>
+</html>

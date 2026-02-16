@@ -1,0 +1,189 @@
+{
+  "users": [
+    {
+      "primaryKey": "zuck",
+      "username": "zuck",
+      "name": "Mark Zuckerberg",
+      "avatar": "images/avatar1.jpg",
+      "verified": true
+    },
+    {
+      "primaryKey": "instagram",
+      "username": "instagram",
+      "name": "Instagram",
+      "avatar": "images/avatar2.jpg",
+      "verified": true
+    },
+    {
+      "primaryKey": "johndoe",
+      "username": "johndoe",
+      "name": "John Doe",
+      "avatar": "images/avatar3.jpg",
+      "verified": false
+    },
+    {
+      "primaryKey": "janedoe",
+      "username": "janedoe",
+      "name": "Jane Doe",
+      "avatar": "images/avatar4.jpg",
+      "verified": false
+    },
+    {
+      "primaryKey": "techguy",
+      "username": "techguy",
+      "name": "Tech Guy",
+      "avatar": "images/avatar5.jpg",
+      "verified": true
+    },
+    {
+      "primaryKey": "designer",
+      "username": "designer",
+      "name": "Sarah Design",
+      "avatar": "images/avatar1.jpg",
+      "verified": false
+    },
+    {
+      "primaryKey": "coder",
+      "username": "coder",
+      "name": "Code Master",
+      "avatar": "images/avatar2.jpg",
+      "verified": true
+    },
+    {
+      "primaryKey": "creative",
+      "username": "creative",
+      "name": "Creative Mind",
+      "avatar": "images/avatar3.jpg",
+      "verified": false
+    }
+  ],
+  "posts": [
+    {
+      "primaryKey": "post_zuck_1",
+      "userId": "zuck",
+      "text": "Welcome to Threads! Let's build something amazing together.",
+      "image": "images/post1.jpg",
+      "time": "2h",
+      "replies": 234,
+      "likes": 1542
+    },
+    {
+      "primaryKey": "post_instagram_1",
+      "userId": "instagram",
+      "text": "Threads is now live! Share your thoughts with the world.",
+      "image": null,
+      "time": "4h",
+      "replies": 89,
+      "likes": 892
+    },
+    {
+      "primaryKey": "post_johndoe_1",
+      "userId": "johndoe",
+      "text": "Just discovered this app and I'm loving it so far!",
+      "image": "images/post2.jpg",
+      "time": "5h",
+      "replies": 12,
+      "likes": 45
+    },
+    {
+      "primaryKey": "post_techguy_1",
+      "userId": "techguy",
+      "text": "Working on some exciting new features. Stay tuned!",
+      "image": null,
+      "time": "6h",
+      "replies": 67,
+      "likes": 234
+    },
+    {
+      "primaryKey": "post_designer_1",
+      "userId": "designer",
+      "text": "Design inspiration for today. What do you think?",
+      "image": "images/post3.jpg",
+      "time": "8h",
+      "replies": 23,
+      "likes": 178
+    },
+    {
+      "primaryKey": "post_coder_1",
+      "userId": "coder",
+      "text": "Coding late into the night. Coffee is my best friend.",
+      "image": null,
+      "time": "10h",
+      "replies": 34,
+      "likes": 89
+    },
+    {
+      "primaryKey": "post_janedoe_1",
+      "userId": "janedoe",
+      "text": "Beautiful sunset today! Had to share this moment.",
+      "image": "images/post4.jpg",
+      "time": "12h",
+      "replies": 56,
+      "likes": 345
+    },
+    {
+      "primaryKey": "post_creative_1",
+      "userId": "creative",
+      "text": "Creativity flows when you least expect it.",
+      "image": null,
+      "time": "1d",
+      "replies": 18,
+      "likes": 67
+    },
+    {
+      "primaryKey": "post_zuck_2",
+      "userId": "zuck",
+      "text": "Building the future, one thread at a time.",
+      "image": "images/post1.jpg",
+      "time": "1d",
+      "replies": 456,
+      "likes": 2341
+    },
+    {
+      "primaryKey": "post_techguy_2",
+      "userId": "techguy",
+      "text": "Tech tip of the day: Always backup your code!",
+      "image": null,
+      "time": "2d",
+      "replies": 89,
+      "likes": 567
+    }
+  ],
+  "comments": [
+    {
+      "primaryKey": "comment_johndoe_1",
+      "postId": "post_zuck_1",
+      "userId": "johndoe",
+      "text": "This is amazing!",
+      "time": "1h"
+    },
+    {
+      "primaryKey": "comment_janedoe_1",
+      "postId": "post_zuck_1",
+      "userId": "janedoe",
+      "text": "Can't wait to see more!",
+      "time": "1h"
+    },
+    {
+      "primaryKey": "comment_techguy_1",
+      "postId": "post_instagram_1",
+      "userId": "techguy",
+      "text": "Great launch!",
+      "time": "3h"
+    },
+    {
+      "primaryKey": "comment_zuck_1",
+      "postId": "post_johndoe_1",
+      "userId": "zuck",
+      "text": "Welcome aboard!",
+      "time": "4h"
+    },
+    {
+      "primaryKey": "comment_coder_1",
+      "postId": "post_designer_1",
+      "userId": "coder",
+      "text": "Love this design!",
+      "time": "7h"
+    }
+  ]
+}

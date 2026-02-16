@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continue to Threads</title>
+    <link rel="stylesheet" href="continue.css">
+    <script>
+        (function() {
+            let raw = localStorage.getItem('threads_theme');
+            let savedTheme = 'auto';
+            if (raw) savedTheme = JSON.parse(raw);
+            if (savedTheme == 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else if (savedTheme == 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="continue-page">
+        <!-- Header -->
+        <header class="header">
+            <a href="login.html" class="back-link">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                <span>Back to Threads</span>
+            </a>
+            <i aria-label="Instagram" class="instagram-logo" role="img" style="background-image: url('https://static.cdninstagram.com/rsrc.php/v4/yd/r/KTLRRiMynIr.png'); background-position: 0px -65px; background-size: 65px 111px; width: 44px; height: 44px; background-repeat: no-repeat; display: inline-block;"></i>
+            <div class="header-spacer"></div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1>Continue to Threads</h1>
+
+            <button class="account-btn" id="continueBtn">
+                <img src="images/avatar1.jpg" alt="Profile" class="avatar">
+                <div class="account-info">
+                    <span class="username">nino____87</span>
+                    <span class="name">ნინო ბრეგვაძე</span>
+                </div>
+                <div class="btn-right">
+                    <svg class="arrow-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"/>
+                    </svg>
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                </div>
+            </button>
+
+            <a href="instagram-login.html" class="another-account">Log in to another Instagram account</a>
+        </main>
+    </div>
+
+    <script>
+        // load saved theme
+        let raw = localStorage.getItem('threads_theme');
+        let savedTheme = 'auto';
+        if (raw) {
+            savedTheme = JSON.parse(raw);
+        }
+        if (savedTheme == 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else if (savedTheme == 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // continue button
+        document.getElementById('continueBtn').addEventListener('click', function() {
+            let btn = this;
+            let arrow = btn.querySelector('.arrow-icon');
+            let spinner = btn.querySelector('.loading-spinner');
+
+            // hide arrow show spinner
+            arrow.style.display = 'none';
+            spinner.style.display = 'block';
+            btn.style.pointerEvents = 'none';
+
+            // save user after delay
+            setTimeout(function() {
+                let user = {
+                    id: Math.floor(Math.random() * 90000) + 10000,
+                    username: 'nino____87',
+                    name: 'ნინო ბრეგვაძე',
+                    avatar: 'images/avatar1.jpg'
+                };
+
+                localStorage.setItem('threads_user', JSON.stringify(user));
+                localStorage.setItem('threads_is_logged_in', 'true');
+
+                window.location.href = 'home.html';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

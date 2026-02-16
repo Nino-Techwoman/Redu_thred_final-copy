@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; script-src 'self' 'unsafe-inline';">
+    <title>Log in to Instagram</title>
+    <link rel="stylesheet" href="instagram-login.css">
+    <script>
+        (function() {
+            let raw = localStorage.getItem('threads_theme');
+            let savedTheme = 'auto';
+            if (raw) savedTheme = JSON.parse(raw);
+            if (savedTheme == 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else if (savedTheme == 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="ig-login-page">
+        <!-- Mobile Header (hidden on desktop) -->
+        <div class="ig-mobile-header">
+            <a href="index.html" class="ig-mobile-logo">
+                <svg class="ig-mobile-logo-svg" role="img" viewBox="0 0 24 24"><defs><linearGradient id="igMobileLogoGrad" x1="69.27%" x2="128.20%" y1="129.46%" y2="29.46%"><stop offset="0" stop-color="#FDD074"></stop><stop offset="25%" stop-color="#F77F34"></stop><stop offset="50%" stop-color="#DD326E"></stop><stop offset="75%" stop-color="#D82B7E"></stop><stop offset="100%" stop-color="#A432B1"></stop></linearGradient><mask id="igMobileLogoMask"><svg viewBox="0 0 24 24" fill="white" width="100%" height="100%"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 7.207a4.793 4.793 0 1 0 0 9.586 4.793 4.793 0 0 0 0-9.586zm0 7.904a3.111 3.111 0 1 1 0-6.222 3.111 3.111 0 0 1 0 6.222z"></path><path d="M16.982 8.138a1.12 1.12 0 1 0 0-2.24 1.12 1.12 0 0 0 0 2.24z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.667c-2.535 0-2.853.01-3.848.056-.994.045-1.672.203-2.266.433a4.574 4.574 0 0 0-1.653 1.077 4.574 4.574 0 0 0-1.076 1.653c-.231.594-.389 1.272-.434 2.266-.046.995-.056 1.313-.056 3.848s.01 2.852.056 3.848c.045.993.203 1.672.433 2.266a4.573 4.573 0 0 0 1.077 1.653c.519.518 1.04.838 1.653 1.076.594.23 1.272.389 2.266.434.995.045 1.313.056 3.848.056s2.852-.01 3.848-.056c.993-.045 1.672-.203 2.266-.434a4.574 4.574 0 0 0 1.653-1.076 4.574 4.574 0 0 0 1.076-1.653c.23-.594.389-1.273.434-2.266.045-.996.056-1.313.056-3.848s-.01-2.853-.056-3.848c-.045-.994-.203-1.672-.434-2.266a4.575 4.575 0 0 0-1.076-1.653 4.573 4.573 0 0 0-1.653-1.076c-.594-.231-1.273-.389-2.266-.434-.996-.046-1.313-.056-3.848-.056zm0 1.681c2.492 0 2.787.01 3.771.055.91.041 1.404.193 1.733.321.436.17.747.372 1.074.698.326.327.529.638.698 1.073.128.33.28.824.321 1.733.045.985.054 1.28.054 3.772s-.009 2.787-.054 3.771c-.041.91-.193 1.404-.321 1.733-.17.436-.372.747-.698 1.074a2.891 2.891 0 0 1-1.074.698c-.329.128-.823.28-1.733.321-.984.045-1.279.054-3.771.054s-2.788-.009-3.771-.054c-.91-.041-1.405-.193-1.734-.321a2.89 2.89 0 0 1-1.073-.698 2.891 2.891 0 0 1-.698-1.074c-.128-.329-.28-.823-.321-1.733-.045-.984-.055-1.279-.055-3.771s.01-2.787.055-3.771c.041-.91.193-1.405.321-1.734a2.89 2.89 0 0 1 .698-1.073 2.89 2.89 0 0 1 1.073-.698c.33-.128.824-.28 1.733-.321.985-.045 1.28-.055 3.772-.055z"></path></svg></mask></defs><rect fill="url(#igMobileLogoGrad)" height="100%" mask="url(#igMobileLogoMask)" width="100%"></rect></svg>
+            </a>
+        </div>
+        <div class="ig-mobile-gradient-line"></div>
+
+        <!-- Left Side -->
+        <div class="ig-left">
+            <a href="index.html" class="ig-logo">
+                <svg class="ig-logo-svg" role="img" viewBox="0 0 24 24"><defs><linearGradient id="igLogoGrad" x1="69.27%" x2="128.20%" y1="129.46%" y2="29.46%"><stop offset="0" stop-color="#FDD074"></stop><stop offset="25%" stop-color="#F77F34"></stop><stop offset="50%" stop-color="#DD326E"></stop><stop offset="75%" stop-color="#D82B7E"></stop><stop offset="100%" stop-color="#A432B1"></stop></linearGradient><mask id="igLogoMask"><svg viewBox="0 0 24 24" fill="white" width="100%" height="100%"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 7.207a4.793 4.793 0 1 0 0 9.586 4.793 4.793 0 0 0 0-9.586zm0 7.904a3.111 3.111 0 1 1 0-6.222 3.111 3.111 0 0 1 0 6.222z"></path><path d="M16.982 8.138a1.12 1.12 0 1 0 0-2.24 1.12 1.12 0 0 0 0 2.24z"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.667c-2.535 0-2.853.01-3.848.056-.994.045-1.672.203-2.266.433a4.574 4.574 0 0 0-1.653 1.077 4.574 4.574 0 0 0-1.076 1.653c-.231.594-.389 1.272-.434 2.266-.046.995-.056 1.313-.056 3.848s.01 2.852.056 3.848c.045.993.203 1.672.433 2.266a4.573 4.573 0 0 0 1.077 1.653c.519.518 1.04.838 1.653 1.076.594.23 1.272.389 2.266.434.995.045 1.313.056 3.848.056s2.852-.01 3.848-.056c.993-.045 1.672-.203 2.266-.434a4.574 4.574 0 0 0 1.653-1.076 4.574 4.574 0 0 0 1.076-1.653c.23-.594.389-1.273.434-2.266.045-.996.056-1.313.056-3.848s-.01-2.853-.056-3.848c-.045-.994-.203-1.672-.434-2.266a4.575 4.575 0 0 0-1.076-1.653 4.573 4.573 0 0 0-1.653-1.076c-.594-.231-1.273-.389-2.266-.434-.996-.046-1.313-.056-3.848-.056zm0 1.681c2.492 0 2.787.01 3.771.055.91.041 1.404.193 1.733.321.436.17.747.372 1.074.698.326.327.529.638.698 1.073.128.33.28.824.321 1.733.045.985.054 1.28.054 3.772s-.009 2.787-.054 3.771c-.041.91-.193 1.404-.321 1.733-.17.436-.372.747-.698 1.074a2.891 2.891 0 0 1-1.074.698c-.329.128-.823.28-1.733.321-.984.045-1.279.054-3.771.054s-2.788-.009-3.771-.054c-.91-.041-1.405-.193-1.734-.321a2.89 2.89 0 0 1-1.073-.698 2.891 2.891 0 0 1-.698-1.074c-.128-.329-.28-.823-.321-1.733-.045-.984-.055-1.279-.055-3.771s.01-2.787.055-3.771c.041-.91.193-1.405.321-1.734a2.89 2.89 0 0 1 .698-1.073 2.89 2.89 0 0 1 1.073-.698c.33-.128.824-.28 1.733-.321.985-.045 1.28-.055 3.772-.055z"></path></svg></mask></defs><rect fill="url(#igLogoGrad)" height="100%" mask="url(#igLogoMask)" width="100%"></rect></svg>
+            </a>
+            <div class="ig-left-content">
+                <span class="ig-tagline">See everyday moments from your <span class="ig-green">close friends</span>.</span>
+                <div class="ig-collage">
+                    <img src="https://static.cdninstagram.com/rsrc.php/v4/yF/r/reN9rvYdLTB.png" alt="Close friends collage" referrerpolicy="origin-when-cross-origin">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side -->
+        <div class="ig-right">
+            <div class="ig-form-container">
+                <span class="ig-form-title">Log in to Instagram</span>
+                <form class="ig-form" id="igLoginForm" novalidate>
+                    <div class="ig-input-group">
+                        <input type="text" class="ig-input" id="igUsername" placeholder="Mobile number, username or email address" autocomplete="username" maxlength="75" aria-label="Mobile number, username or email address">
+                        <span class="ig-error" id="usernameError"></span>
+                    </div>
+                    <div class="ig-input-group">
+                        <div class="ig-password-wrapper">
+                            <input type="password" class="ig-input ig-input-password" id="igPassword" placeholder="Password" autocomplete="current-password" maxlength="128" aria-label="Password">
+                            <button type="button" class="ig-show-password" id="showPasswordBtn" style="display:none;">Show</button>
+                        </div>
+                        <span class="ig-error" id="passwordError"></span>
+                    </div>
+                    <button type="submit" class="ig-login-btn" id="igLoginBtn">Log in</button>
+                    <a href="forgot-password.html" class="ig-forgot-link">Forgotten password?</a>
+                </form>
+                <a href="signup.html" class="ig-create-btn">Create new account</a>
+                <div class="ig-meta">
+                    <svg aria-label="Meta logo" class="ig-meta-logo" role="img" viewBox="0 0 500 100"><defs><linearGradient gradientUnits="userSpaceOnUse" id="_R_19d9lplcldcpbn6b5ipamH1_" x1="124.38" x2="160.839" y1="99" y2="59.326"><stop offset=".427" stop-color="#0278F1"></stop><stop offset=".917" stop-color="#0180FA"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="_R_19d9lplcldcpbn6b5ipamH2_" x1="42" x2="-1.666" y1="4.936" y2="61.707"><stop offset=".427" stop-color="#0165E0"></stop><stop offset=".917" stop-color="#0180FA"></stop></linearGradient><linearGradient gradientUnits="userSpaceOnUse" id="_R_19d9lplcldcpbn6b5ipamH3_" x1="27.677" x2="132.943" y1="28.71" y2="71.118"><stop stop-color="#0064E0"></stop><stop offset=".656" stop-color="#0066E2"></stop><stop offset="1" stop-color="#0278F1"></stop></linearGradient></defs><path d="M185.508 3.01h18.704l31.803 57.313L267.818 3.01h18.297v94.175h-15.264v-72.18l-27.88 49.977h-14.319l-27.88-49.978v72.18h-15.264V3.01ZM336.281 98.87c-7.066 0-13.286-1.565-18.638-4.674-5.352-3.12-9.527-7.434-12.528-12.952-2.989-5.517-4.483-11.835-4.483-18.973 0-7.214 1.461-13.608 4.385-19.17 2.923-5.561 6.989-9.908 12.187-13.05 5.198-3.13 11.176-4.707 17.923-4.707 6.715 0 12.484 1.587 17.319 4.74 4.847 3.164 8.572 7.598 11.177 13.291 2.615 5.693 3.923 12.371 3.923 20.046v4.171h-51.793c.945 5.737 3.275 10.258 6.989 13.554 3.715 3.295 8.407 4.937 14.078 4.937 4.549 0 8.461-.667 11.747-2.014 3.286-1.347 6.374-3.383 9.253-6.12l8.099 9.886c-8.055 7.357-17.934 11.036-29.638 11.036Zm11.143-55.867c-3.198-3.252-7.385-4.872-12.56-4.872-5.045 0-9.264 1.653-12.66 4.97-3.407 3.318-5.55 7.784-6.451 13.39h37.133c-.451-5.737-2.275-10.237-5.462-13.488ZM386.513 39.467h-14.044V27.03h14.044V6.447h14.715V27.03h21.341v12.437h-21.341v31.552c0 5.244.901 8.988 2.703 11.233 1.803 2.244 4.88 3.36 9.253 3.36 1.935 0 3.572-.076 4.924-.23a97.992 97.992 0 0 0 4.461-.645v12.316c-1.67.493-3.549.898-5.637 1.205-2.099.317-4.286.47-6.583.47-15.89 0-23.836-8.649-23.836-25.957V39.467ZM500 97.185h-14.44v-9.82c-2.571 3.678-5.835 6.513-9.791 8.506-3.968 1.993-8.462 3-13.506 3-6.209 0-11.715-1.588-16.506-4.752-4.803-3.153-8.572-7.51-11.308-13.039-2.748-5.54-4.121-11.879-4.121-19.006 0-7.17 1.395-13.52 4.187-19.038 2.791-5.518 6.648-9.843 11.571-12.985 4.935-3.13 10.594-4.707 16.99-4.707 4.813 0 9.132.93 12.956 2.791a25.708 25.708 0 0 1 9.528 7.905v-9.01H500v70.155Zm-14.715-45.61c-1.571-3.985-4.066-7.138-7.461-9.448-3.396-2.31-7.33-3.46-11.781-3.46-6.308 0-11.319 2.102-15.055 6.317-3.737 4.215-5.605 9.92-5.605 17.09 0 7.215 1.802 12.94 5.396 17.156 3.604 4.215 8.484 6.317 14.66 6.317 4.538 0 8.593-1.16 12.154-3.492 3.549-2.332 6.121-5.475 7.692-9.427V51.575Z" fill="#1C2B33"></path><path d="M107.666 0C95.358 0 86.865 4.504 75.195 19.935 64.14 5.361 55.152 0 42.97 0 18.573 0 0 29.768 0 65.408 0 86.847 12.107 99 28.441 99c15.742 0 25.269-13.2 33.445-27.788l9.663-16.66a643.785 643.785 0 0 1 2.853-4.869 746.668 746.668 0 0 1 3.202 5.416l9.663 16.454C99.672 92.72 108.126 99 122.45 99c16.448 0 27.617-13.723 27.617-33.25 0-37.552-19.168-65.75-42.4-65.75ZM57.774 46.496l-9.8 16.25c-9.595 15.976-13.639 19.526-19.67 19.526-6.373 0-11.376-5.325-11.376-17.547 0-24.51 12.062-47.451 26.042-47.451 7.273 0 12.678 3.61 22.062 17.486a547.48 547.48 0 0 0-7.258 11.736Zm64.308 35.776c-6.648 0-11.034-4.233-20.012-19.39l-9.663-16.386c-2.79-4.737-5.402-9.04-7.88-12.945 9.73-14.24 15.591-17.984 23.002-17.984 14.118 0 26.204 20.96 26.204 49.158 0 11.403-4.729 17.547-11.651 17.547Z" fill="#0180FA"></path><path d="M145.631 36h-16.759c3.045 7.956 4.861 17.797 4.861 28.725 0 11.403-4.729 17.547-11.651 17.547H122v16.726l.449.002c16.448 0 27.617-13.723 27.617-33.25 0-10.85-1.6-20.917-4.435-29.75Z" fill="url(#_R_19d9lplcldcpbn6b5ipamH1_)"></path><path d="M42 .016C18.63.776.832 28.908.028 63h16.92C17.483 39.716 28.762 18.315 42 17.31V.017Z" fill="url(#_R_19d9lplcldcpbn6b5ipamH2_)"></path><path d="m75.195 19.935.007-.009c2.447 3.223 5.264 7.229 9.33 13.62l-.005.005c2.478 3.906 5.09 8.208 7.88 12.945l9.663 16.386c8.978 15.157 13.364 19.39 20.012 19.39.31 0 .617-.012.918-.037v16.76c-.183.003-.367.005-.551.005-14.323 0-22.777-6.281-35.182-27.447L77.604 55.1l-.625-1.065L77 54c-2.386-4.175-7.606-12.685-11.973-19.232l.005-.008-.62-.91C63.153 31.983 61.985 30.313 61 29l-.066.024c-7.006-9.172-11.818-11.75-17.964-11.75-.324 0-.648.012-.97.037V.016c.322-.01.646-.016.97-.016 12.182 0 21.17 5.36 32.225 19.935Z" fill="url(#_R_19d9lplcldcpbn6b5ipamH3_)"></path></svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="ig-footer">
+        <nav class="ig-footer-links">
+            <a href="#">Meta</a>
+            <a href="#">About</a>
+            <a href="#">Blog</a>
+            <a href="#">Jobs</a>
+            <a href="#">Help</a>
+            <a href="#">API</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Locations</a>
+            <a href="#">Instagram Lite</a>
+            <a href="#">Meta AI</a>
+            <a href="#">Threads</a>
+            <a href="#">Contact uploading and non-users</a>
+            <a href="#">Meta Verified</a>
+        </nav>
+        <div class="ig-footer-bottom">
+            <span class="ig-footer-lang">English (UK)
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </span>
+            <span class="ig-footer-copyright">&copy; 2026 Instagram from Meta</span>
+        </div>
+    </footer>
+
+    <script>
+        // load saved theme
+        let raw = localStorage.getItem('threads_theme');
+        let savedTheme = 'auto';
+        if (raw) {
+            savedTheme = JSON.parse(raw);
+        }
+        if (savedTheme == 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else if (savedTheme == 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        }
+
+            let usernameInput = document.getElementById('igUsername');
+            let passwordInput = document.getElementById('igPassword');
+            let loginBtn = document.getElementById('igLoginBtn');
+            let showPassBtn = document.getElementById('showPasswordBtn');
+            let usernameError = document.getElementById('usernameError');
+            let passwordError = document.getElementById('passwordError');
+            let form = document.getElementById('igLoginForm');
+            let loginAttempts = 0;
+            let lockoutUntil = 0;
+
+            // clean input
+            function sanitize(str) {
+                let div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML.trim();
+            }
+
+            // check username
+            function validateUsername(val) {
+                if (val == null || val == '') {
+                    return '';
+                }
+                if (val.length < 1) {
+                    return 'Enter your username, email or mobile number.';
+                }
+                if (val.length > 74) {
+                    return 'Username is too long.';
+                }
+                return '';
+            }
+
+            // check password
+            function validatePassword(val) {
+                if (val == null || val == '') {
+                    return '';
+                }
+                if (val.length < 6) {
+                    return 'Password must be at least 6 characters.';
+                }
+                return '';
+            }
+
+            // enable/disable button
+            function updateButtonState() {
+                let u = usernameInput.value.trim();
+                let p = passwordInput.value;
+                loginBtn.disabled = !(u.length >= 1 && p.length >= 6);
+            }
+
+            // show/hide password
+            function updateShowPasswordBtn() {
+                if (passwordInput.value.length > 0) {
+                    showPassBtn.style.display = 'block';
+                } else {
+                    showPassBtn.style.display = 'none';
+                }
+            }
+
+            showPassBtn.addEventListener('click', function() {
+                if (passwordInput.type == 'password') {
+                    passwordInput.type = 'text';
+                    showPassBtn.textContent = 'Hide';
+                } else {
+                    passwordInput.type = 'password';
+                    showPassBtn.textContent = 'Show';
+                }
+                passwordInput.focus();
+            });
+
+            // input events
+            usernameInput.addEventListener('input', function() {
+                usernameError.textContent = '';
+                updateButtonState();
+            });
+
+            passwordInput.addEventListener('input', function() {
+                passwordError.textContent = '';
+                updateButtonState();
+                updateShowPasswordBtn();
+            });
+
+            // show errors when user clicks away
+            usernameInput.addEventListener('blur', function() {
+                let err = validateUsername(usernameInput.value.trim());
+                usernameError.textContent = err;
+            });
+
+            passwordInput.addEventListener('blur', function() {
+                let err = validatePassword(passwordInput.value);
+                passwordError.textContent = err;
+            });
+
+            // form submit
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // rate limit check
+                let now = Date.now();
+                if (now < lockoutUntil) {
+                    let secs = Math.ceil((lockoutUntil - now) / 1000);
+                    usernameError.textContent = 'Too many attempts. Try again in ' + secs + 's.';
+                    return;
+                }
+
+                let username = sanitize(usernameInput.value.trim());
+                let password = passwordInput.value;
+
+                // check fields
+                let uErr = validateUsername(username);
+                let pErr = validatePassword(password);
+                if (uErr) {
+                    usernameError.textContent = uErr;
+                    return;
+                }
+                if (pErr) {
+                    passwordError.textContent = pErr;
+                    return;
+                }
+
+                // track attempts
+                loginAttempts++;
+                if (loginAttempts >= 5) {
+                    lockoutUntil = now + 30000;
+                    loginAttempts = 0;
+                    usernameError.textContent = 'Too many attempts. Try again in 30s.';
+                    return;
+                }
+
+                // disable button and show loading
+                loginBtn.textContent = 'Logging in...';
+                loginBtn.disabled = true;
+                usernameInput.disabled = true;
+                passwordInput.disabled = true;
+
+                setTimeout(function() {
+                    let user = {
+                        id: Math.floor(Math.random() * 90000) + 10000,
+                        username: username,
+                        name: username,
+                        avatar: 'images/avatar' + (Math.floor(Math.random() * 5) + 1) + '.jpg'
+                    };
+                    localStorage.setItem('threads_user', JSON.stringify(user));
+                    localStorage.setItem('threads_is_logged_in', 'true');
+                    window.location.href = 'home.html';
+                }, 1500);
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity - Threads</title>
+    <link rel="stylesheet" href="activity.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <script>
+        (function() {
+            let raw = localStorage.getItem('threads_theme');
+            let savedTheme = 'auto';
+            if (raw) savedTheme = JSON.parse(raw);
+            if (savedTheme == 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else if (savedTheme == 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app">
+        <!-- Left Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-top">
+                <a href="index.html" class="logo-link">
+                    <img src="icons/logo.svg" width="30" height="34" alt="Threads" class="logo">
+                </a>
+            </div>
+
+            <div class="sidebar-menu">
+                <button class="nav-btn" data-tab="home" title="Home">
+                    <img src="icons/home.svg" width="26" height="26" alt="Home">
+                </button>
+                <button class="nav-btn" data-tab="search" title="Search">
+                    <img src="icons/search.svg" width="26" height="26" alt="Search">
+                </button>
+                <button class="nav-btn" data-tab="create" title="Create">
+                    <img src="icons/create.svg" width="26" height="26" alt="Create">
+                </button>
+                <button class="nav-btn active" data-tab="activity" title="Activity">
+                    <img src="icons/heart.svg" width="26" height="26" alt="Activity">
+                </button>
+                <button class="nav-btn" data-tab="profile" title="Profile">
+                    <img src="icons/profile.svg" width="26" height="26" alt="Profile">
+                </button>
+            </div>
+
+            <div class="sidebar-bottom">
+                <button class="nav-btn" id="pinBtn" title="Pin">
+                    <img src="icons/pin.svg" width="26" height="26" alt="Pin">
+                </button>
+                <div class="menu-btn-container">
+                    <button class="nav-btn" id="menuBtn" title="Menu">
+                        <img src="icons/menu.svg" width="26" height="26" alt="Menu">
+                    </button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <!-- Main Menu -->
+                        <div class="menu-main" id="menuMain">
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="appearanceBtn">
+                                    Appearance
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Insights</button>
+                                <button class="menu-item">Settings</button>
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="menuFeedsBtn">
+                                    Feeds
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Saved</button>
+                                <button class="menu-item">Liked</button>
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item">Report a problem</button>
+                                <button class="menu-item logout" id="logoutBtn">Log out</button>
+                            </div>
+                        </div>
+                        <!-- Appearance Submenu -->
+                        <div class="menu-submenu" id="menuAppearanceSubmenu">
+                            <div class="submenu-header">
+                                <button class="submenu-back" id="appearanceBackBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <span class="submenu-title">Appearance</span>
+                                <div class="submenu-spacer"></div>
+                            </div>
+                            <div class="appearance-options">
+                                <button class="appearance-option active" data-theme="light">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="12" r="4"/>
+                                        <line x1="12" y1="2" x2="12" y2="4"/>
+                                        <line x1="12" y1="20" x2="12" y2="22"/>
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                        <line x1="2" y1="12" x2="4" y2="12"/>
+                                        <line x1="20" y1="12" x2="22" y2="12"/>
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="dark">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="auto">
+                                    Auto
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Feeds Submenu -->
+                        <div class="menu-submenu" id="menuFeedsSubmenu">
+                            <div class="submenu-header">
+                                <button class="submenu-back" id="menuFeedsBackBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <span class="submenu-title">Feeds</span>
+                                <button class="submenu-add">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="10" cy="10" r="7.5"/>
+                                        <line x1="10" y1="6.5" x2="10" y2="13.5"/>
+                                        <line x1="6.5" y1="10" x2="13.5" y2="10"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="menu-feeds-list">
+                                <button class="menu-item" data-feed="foryou">For you</button>
+                                <button class="menu-item" data-feed="following">Following</button>
+                                <button class="menu-item" data-feed="ghost">
+                                    Ghost posts
+                                    <svg width="20" height="20" viewBox="0 0 20 19" fill="currentColor">
+                                        <path d="M4.60249 16.4045C4.86284 16.0252 5.38193 15.9287 5.76134 16.1888C6.1495 16.4552 6.56424 16.6861 6.99995 16.8765C7.4757 17.0843 7.97782 17.2443 8.49897 17.3501C8.94984 17.4417 9.24062 17.8823 9.1492 18.3332C9.0575 18.784 8.61788 19.0757 8.16694 18.9842C7.52911 18.8547 6.9149 18.6584 6.33263 18.404C5.79943 18.171 5.29237 17.8888 4.81814 17.5633C4.43901 17.3028 4.34214 16.7838 4.60249 16.4045Z"></path>
+                                        <path d="M14.2379 16.1888C14.6172 15.9285 15.1362 16.0253 15.3968 16.4045C15.6572 16.7839 15.5606 17.3029 15.1811 17.5633C14.7068 17.8888 14.1999 18.171 13.6666 18.404C13.0843 18.6584 12.4702 18.8547 11.8323 18.9842C11.3814 19.0756 10.9408 18.784 10.8492 18.3332C10.7579 17.8824 11.0496 17.4418 11.5003 17.3501C12.0215 17.2443 12.5235 17.0843 12.9993 16.8765C13.4351 16.686 13.8497 16.4553 14.2379 16.1888Z"></path>
+                                        <path d="M1.6671 10.8503C2.11797 10.7587 2.55758 11.0506 2.64936 11.5013C2.75515 12.0225 2.91515 12.5246 3.12299 13.0003C3.31653 13.4433 3.55247 13.8647 3.82449 14.2585C4.08586 14.6371 3.99064 15.1558 3.61209 15.4173C3.23352 15.6786 2.71482 15.5841 2.45323 15.2057C2.12096 14.7248 1.83313 14.2096 1.5963 13.6676C1.34194 13.0854 1.14555 12.4711 1.01606 11.8333C0.924746 11.3825 1.21638 10.942 1.6671 10.8503Z"></path>
+                                        <path d="M9.99962 0.833984C15.0621 0.833995 19.1661 4.93817 19.1663 10.0007C19.1663 10.6273 19.1035 11.2407 18.9832 11.8333C18.8537 12.4712 18.6574 13.0853 18.4029 13.6676C18.1661 14.2098 17.8784 14.7247 17.546 15.2057C17.2844 15.5842 16.7657 15.6787 16.3872 15.4173C16.0089 15.1557 15.9135 14.637 16.1748 14.2585C16.4469 13.8646 16.6827 13.4434 16.8762 13.0003C17.0841 12.5245 17.2441 12.0226 17.3499 11.5013C17.4481 11.0172 17.4996 10.5153 17.4996 10.0007C17.4995 5.85864 14.1417 2.50066 9.99962 2.50065C8.8214 2.50071 7.70832 2.77171 6.71837 3.25423L6.5963 3.30225C6.4708 3.34043 6.33684 3.34834 6.20649 3.32503L2.70307 2.69922L3.33865 6.17334C3.3709 6.34936 3.34609 6.53119 3.26704 6.69173C2.93406 7.3678 2.69972 8.10131 2.58344 8.87354C2.51495 9.32865 2.09048 9.64271 1.63536 9.57422C1.18062 9.50551 0.867211 9.08097 0.935494 8.62614C1.06319 7.77778 1.30818 6.96719 1.65164 6.21159L0.846789 1.81706C0.797783 1.54853 0.882883 1.27241 1.07547 1.07894C1.26812 0.885461 1.54399 0.799138 1.81277 0.847005L6.24148 1.63883C7.38929 1.12218 8.66189 0.834039 9.99962 0.833984Z"></path>
+                                        <path d="M13.1572 10.974C13.4826 10.6486 14.0101 10.6485 14.3356 10.974C14.6608 11.2994 14.6609 11.8269 14.3356 12.1523C13.7273 12.7606 12.87 13.0214 12.0797 13.0215C11.2894 13.0215 10.4321 12.7606 9.82384 12.1523C9.4984 11.8269 9.4984 11.2994 9.82384 10.974C10.1493 10.6486 10.6768 10.6485 11.0022 10.974C11.2273 11.1989 11.6202 11.3548 12.0797 11.3548C12.5392 11.3548 12.9322 11.1989 13.1572 10.974Z"></path>
+                                        <path d="M14.7913 7.81966C15.3664 7.82039 15.8318 8.28705 15.8313 8.86214C15.8306 9.43723 15.364 9.90285 14.7888 9.90218C14.2137 9.9016 13.7482 9.43482 13.7488 8.8597C13.7494 8.28458 14.2162 7.8191 14.7913 7.81966Z"></path>
+                                        <path d="M9.37543 7.81315C9.95079 7.81371 10.4169 8.28038 10.4163 8.85563C10.4157 9.43071 9.94895 9.89624 9.37381 9.89567C8.79875 9.89509 8.33245 9.42827 8.33295 8.85319C8.33372 8.27828 8.80075 7.81275 9.37543 7.81315Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Top Bar -->
+        <div class="mobile-top-bar">
+            <div class="mobile-top-spacer"></div>
+            <a href="index.html" class="mobile-top-logo">
+                <img src="icons/logo.svg" width="28" height="32" alt="Threads">
+            </a>
+            <div class="mobile-menu-container">
+                <button class="mobile-top-menu" id="mobileMenuBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <rect rx="1.25" x="3" y="7" width="18" height="2.5"></rect>
+                        <rect rx="1.25" x="10" y="15" width="11" height="2.5"></rect>
+                    </svg>
+                </button>
+                <div class="menu-dropdown" id="mobileMenuDropdown">
+                    <div class="menu-main" id="mobileMenuMain">
+                        <div class="menu-section">
+                            <button class="menu-item has-arrow" id="mobileAppearanceBtn">
+                                Appearance
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <button class="menu-item" onclick="window.location.href='insights.html'">Insights</button>
+                            <button class="menu-item">Settings</button>
+                        </div>
+                        <div class="menu-divider"></div>
+                        <div class="menu-section">
+                            <button class="menu-item has-arrow" id="mobileFeedsBtn">
+                                Feeds
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </button>
+                            <button class="menu-item">Saved</button>
+                            <button class="menu-item">Liked</button>
+                        </div>
+                        <div class="menu-divider"></div>
+                        <div class="menu-section">
+                            <button class="menu-item">Report a problem</button>
+                            <button class="menu-item logout" id="mobileLogoutBtn">Log out</button>
+                        </div>
+                    </div>
+                    <div class="menu-submenu" id="mobileAppearanceSubmenu">
+                        <div class="submenu-header">
+                            <button class="submenu-back" id="mobileAppearanceBackBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <span class="submenu-title">Appearance</span>
+                            <div class="submenu-spacer"></div>
+                        </div>
+                        <div class="appearance-options">
+                            <button class="appearance-option active" data-theme="light">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            </button>
+                            <button class="appearance-option" data-theme="dark">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            </button>
+                            <button class="appearance-option" data-theme="auto">Auto</button>
+                        </div>
+                    </div>
+                    <div class="menu-submenu" id="mobileFeedsSubmenu">
+                        <div class="submenu-header">
+                            <button class="submenu-back" id="mobileFeedsBackBtn">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <span class="submenu-title">Feeds</span>
+                            <button class="submenu-add">
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7.5"></circle><line x1="10" y1="6.5" x2="10" y2="13.5"></line><line x1="6.5" y1="10" x2="13.5" y2="10"></line></svg>
+                            </button>
+                        </div>
+                        <div class="menu-feeds-list">
+                            <button class="menu-item" data-feed="foryou">For you</button>
+                            <button class="menu-item" data-feed="following">Following</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Mobile Filter Tabs -->
+                <div class="activity-tabs-mobile">
+                    <button class="activity-tab-btn active" data-filter="all">All</button>
+                    <button class="activity-tab-btn" data-filter="follows">Follows</button>
+                    <button class="activity-tab-btn" data-filter="replies">Replies</button>
+                    <button class="activity-tab-btn" data-filter="mentions">Mentions</button>
+                    <button class="activity-tab-btn" data-filter="quotes">Quotes</button>
+                    <button class="activity-tab-btn" data-filter="reposts">Reposts</button>
+                </div>
+
+                <header class="header">
+                    <a href="index.html" class="header-logo-link">
+                        <img src="icons/logo.svg" width="32" height="32" alt="Threads" class="header-logo">
+                    </a>
+                    <div class="activity-header-wrapper">
+                        <span class="activity-title">Activity</span>
+                        <div class="activity-dropdown-container">
+                            <button class="activity-dropdown-btn" id="activityDropdownBtn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </button>
+                            <div class="activity-dropdown" id="activityDropdown">
+                                <button class="activity-dropdown-item active" data-filter="all">
+                                    <span>All</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>
+                                <button class="activity-dropdown-item" data-filter="follows">
+                                    <span>Follows</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>
+                                <button class="activity-dropdown-item" data-filter="replies">
+                                    <span>Replies</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>
+                                <button class="activity-dropdown-item" data-filter="mentions">
+                                    <span>Mentions</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>
+                                <button class="activity-dropdown-item" data-filter="quotes">
+                                    <span>Quotes</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>
+                                <button class="activity-dropdown-item" data-filter="reposts">
+                                    <span>Reposts</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>
+                                <button class="activity-dropdown-item" data-filter="verified">
+                                    <span>Verified</span>
+                                    <svg class="check-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="activity-more-wrapper">
+                        <button class="activity-more-btn" id="activityMoreBtn">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <circle cx="6" cy="12" r="2"/>
+                                <circle cx="12" cy="12" r="2"/>
+                                <circle cx="18" cy="12" r="2"/>
+                            </svg>
+                        </button>
+                        <div class="activity-more-dropdown" id="activityMoreDropdown">
+                            <button class="activity-more-dropdown-item">
+                                <span>Add as column</span>
+                                <svg aria-label="Add as column" role="img" viewBox="0 0 20 20" width="20" height="20" fill="currentColor">
+                                    <title>Add as column</title>
+                                    <path d="M3 2C2.58579 2 2.25 2.33579 2.25 2.75V4.25H0.75C0.335786 4.25 0 4.58579 0 5C0 5.41421 0.335786 5.75 0.75 5.75H2.25V7.25C2.25 7.66421 2.58579 8 3 8C3.41421 8 3.75 7.66421 3.75 7.25V5.75H5.25C5.66421 5.75 6 5.41421 6 5C6 4.58579 5.66421 4.25 5.25 4.25H3.75V2.75C3.75 2.33579 3.41421 2 3 2Z" fill="currentColor"></path>
+                                    <path clip-rule="evenodd" d="M7.25 3.75H16C17.5188 3.75 18.75 4.98122 18.75 6.5V14.5C18.75 16.0188 17.5188 17.25 16 17.25H5C3.48122 17.25 2.25 16.0188 2.25 14.5V9.5H3.75V14.5C3.75 15.1904 4.30964 15.75 5 15.75H7.25V3.75ZM8.75 15.75V5.25H12.25V15.75H8.75ZM13.75 15.75H16C16.6904 15.75 17.25 15.1904 17.25 14.5V6.5C17.25 5.80964 16.6904 5.25 16 5.25H13.75V15.75Z" fill="currentColor" fill-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </header>
+                <div class="activity-container">
+                    <div class="activity-list" id="activityList">
+                        <!-- Activity items will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- FAB Button -->
+        <button class="fab" id="fab">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="modal-overlay" id="searchModalOverlay">
+        <div class="search-page-wrapper">
+            <div class="search-modal-header">
+                <h2>Search</h2>
+                <button class="search-modal-more-btn" id="searchModalMoreBtn">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="6" cy="12" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="18" cy="12" r="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal search-modal">
+                <div class="search-modal-content">
+                <div class="search-input-wrapper">
+                    <svg class="search-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input type="text" class="search-input" placeholder="Search">
+                    <button class="search-filter-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="4" y1="6" x2="20" y2="6"/>
+                            <line x1="4" y1="12" x2="20" y2="12"/>
+                            <line x1="4" y1="18" x2="20" y2="18"/>
+                            <circle cx="8" cy="6" r="2" fill="#fff"/>
+                            <circle cx="16" cy="12" r="2" fill="#fff"/>
+                            <circle cx="10" cy="18" r="2" fill="#fff"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="search-suggestions">
+                    <h3 class="search-suggestions-title">Follow suggestions</h3>
+                    <div class="search-suggestions-list" id="searchSuggestionsList">
+                        <!-- Suggestions will be rendered here -->
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-content create-post-modal" id="createPostForm">
+                <div class="create-post-header">
+                    <button class="create-post-close" id="createPostClose">
+                        <svg aria-label="Close" role="img" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                            <path d="M19.707 5.707a1 1 0 0 0-1.414-1.414L12 10.586 5.707 4.293a1 1 0 0 0-1.414 1.414L10.586 12l-6.293 6.293a1 1 0 1 0 1.414 1.414L12 13.414l6.293 6.293a1 1 0 0 0 1.414-1.414L13.414 12l6.293-6.293Z"/>
+                        </svg>
+                    </button>
+                    <h2>New thread</h2>
+                    <div class="create-post-header-icons">
+                        <button class="header-icon-btn" id="draftsBtn" title="Drafts">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <rect height="15" rx="4.5" stroke="currentColor" stroke-width="2" width="15" x="7" y="7" fill="none"></rect>
+                                <path clip-rule="evenodd" d="M15.3833 4.50007C15.0018 4.15977 14.5475 3.9045 14.05 3.75672C13.7983 3.68195 13.432 3.6357 12.7078 3.68313C11.9633 3.73189 11.0102 3.86454 9.59538 4.06338C8.18054 4.26222 7.22784 4.39741 6.4987 4.55577C5.78946 4.7098 5.45011 4.85522 5.22879 4.99646C4.51904 5.44941 3.99637 6.14302 3.7566 6.95012C3.68183 7.2018 3.63558 7.56809 3.68301 8.29232C3.73177 9.03686 3.86442 9.98992 4.06326 11.4047C4.23845 12.6513 4.36423 13.5391 4.49997 14.2313V17.5001C4.49997 17.737 4.51175 17.9713 4.53475 18.2022C4.05772 17.8249 3.64282 17.3681 3.31041 16.8473C2.66675 15.8387 2.47208 14.4535 2.08272 11.6831C1.69337 8.91269 1.49869 7.52748 1.83941 6.38057C2.21619 5.11227 3.03754 4.02231 4.15285 3.31053C5.16142 2.66688 6.54662 2.4722 9.31703 2.08284C12.0874 1.69349 13.4726 1.49881 14.6196 1.83953C15.8878 2.21631 16.9778 3.03766 17.6896 4.15297C17.7623 4.26696 17.8294 4.38577 17.8916 4.51084C17.7619 4.50369 17.6314 4.50007 17.5 4.50007H15.3833Z" fill-rule="evenodd"></path>
+                                <rect height="2" rx="1" width="9" x="10" y="12"></rect>
+                                <rect height="2" rx="1" width="6" x="10" y="15"></rect>
+                            </svg>
+                        </button>
+                        <div class="more-menu-container">
+                            <button class="header-icon-btn" id="moreMenuBtn" title="More">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M7.5 13.5C6.67157 13.5 6 12.8284 6 12C6 11.1716 6.67157 10.5 7.5 10.5C8.32843 10.5 9 11.1716 9 12C9 12.8284 8.32843 13.5 7.5 13.5Z"/>
+                                    <path d="M12 13.5C11.1716 13.5 10.5 12.8284 10.5 12C10.5 11.1716 11.1716 10.5 12 10.5C12.8284 10.5 13.5 11.1716 13.5 12C13.5 12.8284 12.8284 13.5 12 13.5Z"/>
+                                    <path d="M16.5 13.5C15.6716 13.5 15 12.8284 15 12C15 11.1716 15.6716 10.5 16.5 10.5C17.3284 10.5 18 11.1716 18 12C18 12.8284 17.3284 13.5 16.5 13.5Z"/>
+                                </svg>
+                            </button>
+                            <div class="more-menu-dropdown" id="moreMenuDropdown">
+                                <button class="more-menu-item">Add AI label</button>
+                                <button class="more-menu-item">Mark as paid partnership</button>
+                                <div class="more-menu-divider"></div>
+                                <button class="more-menu-item">
+                                    <span>Schedule...</span>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-post-body">
+                    <div class="create-post-user">
+                        <img src="" alt="avatar" class="create-post-avatar" id="createPostAvatar">
+                        <div class="create-post-line"></div>
+                    </div>
+                    <div class="create-post-content">
+                        <div class="create-post-user-row">
+                            <span class="create-post-username" id="createPostUsername"></span>
+                        </div>
+                        <textarea class="create-post-textarea" id="createPostText" placeholder="What's new?"></textarea>
+                        <div class="create-post-image-preview" id="createPostImagePreview" style="display: none;"></div>
+                        <div class="create-post-actions">
+                            <label class="action-icon-btn" title="Add image">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <input type="file" accept="image/*" id="createPostImage" style="display: none;" multiple>
+                            </label>
+                            <button class="action-icon-btn" title="Add GIF">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                    <text x="6" y="15" font-size="8" fill="currentColor" stroke="none" font-weight="bold">GIF</text>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add hashtag">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="4" y1="9" x2="20" y2="9"/>
+                                    <line x1="4" y1="15" x2="20" y2="15"/>
+                                    <line x1="10" y1="3" x2="8" y2="21"/>
+                                    <line x1="16" y1="3" x2="14" y2="21"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add poll">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <line x1="7" y1="8" x2="17" y2="8"/>
+                                    <line x1="7" y1="12" x2="14" y2="12"/>
+                                    <line x1="7" y1="16" x2="11" y2="16"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Add location">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="create-post-add-thread">
+                    <img src="" alt="avatar" class="create-post-avatar-small" id="createPostAvatarSmall">
+                    <span class="add-thread-text">Add to thread</span>
+                </div>
+                <div class="create-post-footer">
+                    <span class="reply-options-text">Anyone can reply</span>
+                    <button class="post-btn" id="postBtn" disabled>Post</button>
+                </div>
+            </div>
+            <!-- Drafts view (inside same modal) -->
+            <div class="drafts-view" id="draftsView" style="display: none;">
+                <div class="drafts-header">
+                    <button class="drafts-back-btn" id="draftsBackBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5"/>
+                            <polyline points="12 19 5 12 12 5"/>
+                        </svg>
+                    </button>
+                    <h2>Drafts</h2>
+                    <div class="drafts-header-spacer"></div>
+                </div>
+                <div class="drafts-content">
+                    <div class="drafts-empty">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="currentColor" class="drafts-empty-icon">
+                            <rect height="15" rx="4.5" stroke="currentColor" stroke-width="1.5" width="15" x="7" y="7" fill="none"/>
+                            <path clip-rule="evenodd" d="M15.3833 4.50007C15.0018 4.15977 14.5475 3.9045 14.05 3.75672C13.7983 3.68195 13.432 3.6357 12.7078 3.68313C11.9633 3.73189 11.0102 3.86454 9.59538 4.06338C8.18054 4.26222 7.22784 4.39741 6.4987 4.55577C5.78946 4.7098 5.45011 4.85522 5.22879 4.99646C4.51904 5.44941 3.99637 6.14302 3.7566 6.95012C3.68183 7.2018 3.63558 7.56809 3.68301 8.29232C3.73177 9.03686 3.86442 9.98992 4.06326 11.4047C4.23845 12.6513 4.36423 13.5391 4.49997 14.2313V17.5001C4.49997 17.737 4.51175 17.9713 4.53475 18.2022C4.05772 17.8249 3.64282 17.3681 3.31041 16.8473C2.66675 15.8387 2.47208 14.4535 2.08272 11.6831C1.69337 8.91269 1.49869 7.52748 1.83941 6.38057C2.21619 5.11227 3.03754 4.02231 4.15285 3.31053C5.16142 2.66688 6.54662 2.4722 9.31703 2.08284C12.0874 1.69349 13.4726 1.49881 14.6196 1.83953C15.8878 2.21631 16.9778 3.03766 17.6896 4.15297C17.7623 4.26696 17.8294 4.38577 17.8916 4.51084C17.7619 4.50369 17.6314 4.50007 17.5 4.50007H15.3833Z" fill-rule="evenodd"/>
+                            <rect height="2" rx="1" width="9" x="10" y="12"/>
+                            <rect height="2" rx="1" width="6" x="10" y="15"/>
+                        </svg>
+                        <p class="drafts-empty-title">No drafts yet</p>
+                        <p class="drafts-empty-text">Your drafts will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reply Modal -->
+    <div class="modal-overlay" id="replyModalOverlay">
+        <div class="modal">
+            <div class="modal-content create-post-modal" id="replyPostForm">
+                <div class="create-post-header">
+                    <button class="create-post-close" id="replyPostClose">Cancel</button>
+                    <h2>Reply</h2>
+                    <div class="create-post-header-icons">
+                        <div class="more-menu-container">
+                            <button class="header-icon-btn" id="replyMoreMenuBtn" title="More">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                                    <path d="M7.5 13.5C6.67157 13.5 6 12.8284 6 12C6 11.1716 6.67157 10.5 7.5 10.5C8.32843 10.5 9 11.1716 9 12C9 12.8284 8.32843 13.5 7.5 13.5Z"/>
+                                    <path d="M12 13.5C11.1716 13.5 10.5 12.8284 10.5 12C10.5 11.1716 11.1716 10.5 12 10.5C12.8284 10.5 13.5 11.1716 13.5 12C13.5 12.8284 12.8284 13.5 12 13.5Z"/>
+                                    <path d="M16.5 13.5C15.6716 13.5 15 12.8284 15 12C15 11.1716 15.6716 10.5 16.5 10.5C17.3284 10.5 18 11.1716 18 12C18 12.8284 17.3284 13.5 16.5 13.5Z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="reply-original-post" id="replyOriginalPost">
+                </div>
+                <div class="create-post-body">
+                    <div class="create-post-user">
+                        <img src="" alt="avatar" class="create-post-avatar" id="replyUserAvatar">
+                        <div class="create-post-line"></div>
+                    </div>
+                    <div class="create-post-content">
+                        <div class="create-post-user-row">
+                            <span class="create-post-username" id="replyUsername"></span>
+                            <button class="add-topic-btn">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <polyline points="9 18 15 12 9 6"/>
+                                </svg>
+                                Add a topic
+                            </button>
+                        </div>
+                        <textarea class="create-post-textarea" id="replyTextarea" placeholder="Reply to ..." maxlength="2200"></textarea>
+                        <div class="create-post-actions">
+                            <label class="action-icon-btn" title="Add image">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                                    <polyline points="21 15 16 10 5 21"/>
+                                </svg>
+                                <input type="file" accept="image/*" id="replyImage" style="display: none;" multiple>
+                            </label>
+                            <button class="action-icon-btn" title="Add GIF">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                    <text x="6" y="15" font-size="8" fill="currentColor" stroke="none" font-weight="bold">GIF</text>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Emoji">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                                    <line x1="9" y1="9" x2="9.01" y2="9"/>
+                                    <line x1="15" y1="9" x2="15.01" y2="9"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Format">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="4" y1="8" x2="20" y2="8"/>
+                                    <line x1="4" y1="16" x2="16" y2="16"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="List">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                                    <line x1="7" y1="8" x2="17" y2="8"/>
+                                    <line x1="7" y1="12" x2="14" y2="12"/>
+                                    <line x1="7" y1="16" x2="11" y2="16"/>
+                                </svg>
+                            </button>
+                            <button class="action-icon-btn" title="Location">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-to-thread">
+                    <span class="add-thread-text">Add to thread</span>
+                </div>
+                <div class="create-post-footer">
+                    <span class="reply-options-text">Reply options</span>
+                    <button class="post-btn" id="replyPostBtn" disabled>Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Repost Bottom Sheet -->
+    <div class="modal-overlay" id="repostSheetOverlay">
+        <div class="repost-sheet">
+            <div class="repost-sheet-item" id="repostBtn">
+                <span>Repost</span>
+                <svg aria-label="Repost" role="img" viewBox="0 0 18 18" style="fill: currentColor; height: 20px; width: 20px;"><title>Repost</title><path d="M6.41256 1.23531C6.6349 0.971277 7.02918 0.937481 7.29321 1.15982L9.96509 3.40982C10.1022 3.52528 10.1831 3.69404 10.1873 3.87324C10.1915 4.05243 10.1186 4.2248 9.98706 4.34656L7.31518 6.81971C7.06186 7.05419 6.66643 7.03892 6.43196 6.7856C6.19748 6.53228 6.21275 6.13685 6.46607 5.90237L7.9672 4.51289H5.20312C3.68434 4.51289 2.45312 5.74411 2.45312 7.26289V9.51289V11.7629C2.45312 13.2817 3.68434 14.5129 5.20312 14.5129C5.5483 14.5129 5.82812 14.7927 5.82812 15.1379C5.82812 15.4831 5.5483 15.7629 5.20312 15.7629C2.99399 15.7629 1.20312 13.972 1.20312 11.7629V9.51289V7.26289C1.20312 5.05375 2.99399 3.26289 5.20312 3.26289H7.85002L6.48804 2.11596C6.22401 1.89362 6.19021 1.49934 6.41256 1.23531Z"></path><path d="M11.5874 17.7904C11.3651 18.0545 10.9708 18.0883 10.7068 17.8659L8.03491 15.6159C7.89781 15.5005 7.81687 15.3317 7.81267 15.1525C7.80847 14.9733 7.8814 14.801 8.01294 14.6792L10.6848 12.206C10.9381 11.9716 11.3336 11.9868 11.568 12.2402C11.8025 12.4935 11.7872 12.8889 11.5339 13.1234L10.0328 14.5129H12.7969C14.3157 14.5129 15.5469 13.2816 15.5469 11.7629V9.51286V7.26286C15.5469 5.74408 14.3157 4.51286 12.7969 4.51286C12.4517 4.51286 12.1719 4.23304 12.1719 3.88786C12.1719 3.54269 12.4517 3.26286 12.7969 3.26286C15.006 3.26286 16.7969 5.05373 16.7969 7.26286V9.51286V11.7629C16.7969 13.972 15.006 15.7629 12.7969 15.7629H10.15L11.512 16.9098C11.776 17.1321 11.8098 17.5264 11.5874 17.7904Z"></path></svg>
+            </div>
+            <div class="repost-sheet-divider"></div>
+            <div class="repost-sheet-item" id="quoteBtn">
+                <span>Quote</span>
+                <svg aria-label="Quote" role="img" viewBox="0 0 20 20" style="fill: currentColor; height: 20px; width: 20px;"><title>Quote</title><path d="M7.68694 19.611C6.70477 20.3965 5.25 19.6973 5.25 18.4396V16.3507L5 16.3507C2.37665 16.3507 0.25 14.224 0.25 11.6007V9.35066V6.10066C0.25 3.47731 2.37665 1.35066 5 1.35066H5.5H14.2188H14.9688C17.5921 1.35066 19.7188 3.47731 19.7188 6.10066V9.35066V11.6007C19.7188 14.224 17.5921 16.3507 14.9688 16.3507H14.2188L11.763 16.3507L7.68694 19.611ZM6.75 18.4396L10.8261 15.1793C11.0921 14.9666 11.4225 14.8507 11.763 14.8507L14.2187 14.8507H14.9688C16.7637 14.8507 18.2188 13.3956 18.2188 11.6007V9.35066V6.10066C18.2188 4.30574 16.7637 2.85066 14.9688 2.85066H14.2188H5.5H5C3.20507 2.85066 1.75 4.30574 1.75 6.10066V9.35066V11.6007C1.75 13.3956 3.20508 14.8507 5 14.8507H5.25C6.07843 14.8507 6.75 15.5222 6.75 16.3507V18.4396Z"></path><path d="M7.67735 6.5C6.62472 6.5 5.82617 7.20469 5.82617 8.20517C5.82617 9.16216 6.45231 9.90164 7.44142 9.90164C7.80439 9.90164 8.16737 9.84074 8.4033 9.57105H8.46682C8.14922 10.2583 7.48679 10.702 6.9151 10.8412C6.58842 10.9282 6.4886 11.0674 6.4886 11.2675C6.4886 11.485 6.67009 11.6503 6.92418 11.6503C7.81347 11.6503 9.58298 10.6411 9.58298 8.51837C9.58298 7.37869 8.81165 6.5 7.67735 6.5Z"></path><path d="M12.396 6.5C11.3434 6.5 10.5449 7.20469 10.5449 8.20517C10.5449 9.16216 11.171 9.90164 12.1692 9.90164C12.5231 9.90164 12.8861 9.84074 13.122 9.57105H13.1855C12.8679 10.2583 12.2055 10.702 11.6338 10.8412C11.3071 10.9282 11.2073 11.0674 11.2073 11.2675C11.2073 11.485 11.3888 11.6503 11.6429 11.6503C12.5322 11.6503 14.3017 10.6411 14.3017 8.51837C14.3017 7.37869 13.5303 6.5 12.396 6.5Z"></path></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Post Toast -->
+    <div class="post-toast" id="postToast">
+        <div class="post-toast-content">
+            <div class="post-toast-posting" id="toastPosting">
+                <svg class="post-toast-spinner" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                <span>Posting...</span>
+            </div>
+            <div class="post-toast-posted" id="toastPosted" style="display: none;">
+                <span>Posted</span>
+                <button class="post-toast-view" id="toastViewBtn">View</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="security.js"></script>
+    <script src="activity.js"></script>
+</body>
+</html>

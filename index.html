@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Threads Clone</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <script>
+        (function() {
+            let raw = localStorage.getItem('threads_theme');
+            let savedTheme = 'auto';
+            if (raw) savedTheme = JSON.parse(raw);
+            if (savedTheme == 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else if (savedTheme == 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="app">
+        <!-- Left Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-top">
+                <a href="index.html" class="logo-link">
+                    <img src="icons/logo.svg" width="30" height="34" alt="Threads" class="logo">
+                </a>
+            </div>
+
+            <div class="sidebar-menu">
+                <button class="nav-btn active" data-tab="home" title="Home">
+                    <img src="icons/home.svg" width="26" height="26" alt="Home">
+                </button>
+                <button class="nav-btn" data-tab="search" title="Search">
+                    <img src="icons/search.svg" width="26" height="26" alt="Search">
+                </button>
+                <button class="nav-btn" data-tab="create" title="Create">
+                    <img src="icons/create.svg" width="26" height="26" alt="Create">
+                </button>
+                <button class="nav-btn" data-tab="activity" title="Activity">
+                    <img src="icons/heart.svg" width="26" height="26" alt="Activity">
+                </button>
+                <button class="nav-btn" data-tab="profile" title="Profile">
+                    <img src="icons/profile.svg" width="26" height="26" alt="Profile">
+                </button>
+            </div>
+
+            <div class="sidebar-bottom">
+                <button class="nav-btn" id="pinBtn" title="Pin">
+                    <img src="icons/pin.svg" width="26" height="26" alt="Pin">
+                </button>
+                <div class="menu-btn-container">
+                    <button class="nav-btn" id="menuBtn" title="Menu">
+                        <img src="icons/menu.svg" width="26" height="26" alt="Menu">
+                    </button>
+                    <div class="menu-dropdown" id="menuDropdown">
+                        <!-- Main Menu -->
+                        <div class="menu-main" id="menuMain">
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="appearanceBtn">
+                                    Appearance
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Insights</button>
+                                <button class="menu-item">Settings</button>
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item has-arrow" id="menuFeedsBtn">
+                                    Feeds
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="9 18 15 12 9 6"/>
+                                    </svg>
+                                </button>
+                                <button class="menu-item">Saved</button>
+                                <button class="menu-item">Liked</button>
+                            </div>
+                            <div class="menu-divider"></div>
+                            <div class="menu-section">
+                                <button class="menu-item">Report a problem</button>
+                                <button class="menu-item logout" id="logoutBtn">Log out</button>
+                            </div>
+                        </div>
+                        <!-- Appearance Submenu -->
+                        <div class="menu-submenu" id="menuAppearanceSubmenu">
+                            <div class="submenu-header">
+                                <button class="submenu-back" id="appearanceBackBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <span class="submenu-title">Appearance</span>
+                                <div class="submenu-spacer"></div>
+                            </div>
+                            <div class="appearance-options">
+                                <button class="appearance-option active" data-theme="light">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="12" cy="12" r="4"/>
+                                        <line x1="12" y1="2" x2="12" y2="4"/>
+                                        <line x1="12" y1="20" x2="12" y2="22"/>
+                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                        <line x1="2" y1="12" x2="4" y2="12"/>
+                                        <line x1="20" y1="12" x2="22" y2="12"/>
+                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="dark">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                                    </svg>
+                                </button>
+                                <button class="appearance-option" data-theme="auto">
+                                    Auto
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Feeds Submenu -->
+                        <div class="menu-submenu" id="menuFeedsSubmenu">
+                            <div class="submenu-header">
+                                <button class="submenu-back" id="menuFeedsBackBtn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="15 18 9 12 15 6"/>
+                                    </svg>
+                                </button>
+                                <span class="submenu-title">Feeds</span>
+                                <button class="submenu-add">
+                                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <circle cx="10" cy="10" r="7.5"/>
+                                        <line x1="10" y1="6.5" x2="10" y2="13.5"/>
+                                        <line x1="6.5" y1="10" x2="13.5" y2="10"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="menu-feeds-list">
+                                <button class="menu-item" data-feed="foryou">For you</button>
+                                <button class="menu-item" data-feed="following">Following</button>
+                                <button class="menu-item" data-feed="ghost">
+                                    Ghost posts
+                                    <svg width="20" height="20" viewBox="0 0 20 19" fill="currentColor">
+                                        <path d="M4.60249 16.4045C4.86284 16.0252 5.38193 15.9287 5.76134 16.1888C6.1495 16.4552 6.56424 16.6861 6.99995 16.8765C7.4757 17.0843 7.97782 17.2443 8.49897 17.3501C8.94984 17.4417 9.24062 17.8823 9.1492 18.3332C9.0575 18.784 8.61788 19.0757 8.16694 18.9842C7.52911 18.8547 6.9149 18.6584 6.33263 18.404C5.79943 18.171 5.29237 17.8888 4.81814 17.5633C4.43901 17.3028 4.34214 16.7838 4.60249 16.4045Z"></path>
+                                        <path d="M14.2379 16.1888C14.6172 15.9285 15.1362 16.0253 15.3968 16.4045C15.6572 16.7839 15.5606 17.3029 15.1811 17.5633C14.7068 17.8888 14.1999 18.171 13.6666 18.404C13.0843 18.6584 12.4702 18.8547 11.8323 18.9842C11.3814 19.0756 10.9408 18.784 10.8492 18.3332C10.7579 17.8824 11.0496 17.4418 11.5003 17.3501C12.0215 17.2443 12.5235 17.0843 12.9993 16.8765C13.4351 16.686 13.8497 16.4553 14.2379 16.1888Z"></path>
+                                        <path d="M1.6671 10.8503C2.11797 10.7587 2.55758 11.0506 2.64936 11.5013C2.75515 12.0225 2.91515 12.5246 3.12299 13.0003C3.31653 13.4433 3.55247 13.8647 3.82449 14.2585C4.08586 14.6371 3.99064 15.1558 3.61209 15.4173C3.23352 15.6786 2.71482 15.5841 2.45323 15.2057C2.12096 14.7248 1.83313 14.2096 1.5963 13.6676C1.34194 13.0854 1.14555 12.4711 1.01606 11.8333C0.924746 11.3825 1.21638 10.942 1.6671 10.8503Z"></path>
+                                        <path d="M9.99962 0.833984C15.0621 0.833995 19.1661 4.93817 19.1663 10.0007C19.1663 10.6273 19.1035 11.2407 18.9832 11.8333C18.8537 12.4712 18.6574 13.0853 18.4029 13.6676C18.1661 14.2098 17.8784 14.7247 17.546 15.2057C17.2844 15.5842 16.7657 15.6787 16.3872 15.4173C16.0089 15.1557 15.9135 14.637 16.1748 14.2585C16.4469 13.8646 16.6827 13.4434 16.8762 13.0003C17.0841 12.5245 17.2441 12.0226 17.3499 11.5013C17.4481 11.0172 17.4996 10.5153 17.4996 10.0007C17.4995 5.85864 14.1417 2.50066 9.99962 2.50065C8.8214 2.50071 7.70832 2.77171 6.71837 3.25423L6.5963 3.30225C6.4708 3.34043 6.33684 3.34834 6.20649 3.32503L2.70307 2.69922L3.33865 6.17334C3.3709 6.34936 3.34609 6.53119 3.26704 6.69173C2.93406 7.3678 2.69972 8.10131 2.58344 8.87354C2.51495 9.32865 2.09048 9.64271 1.63536 9.57422C1.18062 9.50551 0.867211 9.08097 0.935494 8.62614C1.06319 7.77778 1.30818 6.96719 1.65164 6.21159L0.846789 1.81706C0.797783 1.54853 0.882883 1.27241 1.07547 1.07894C1.26812 0.885461 1.54399 0.799138 1.81277 0.847005L6.24148 1.63883C7.38929 1.12218 8.66189 0.834039 9.99962 0.833984Z"></path>
+                                        <path d="M13.1572 10.974C13.4826 10.6486 14.0101 10.6485 14.3356 10.974C14.6608 11.2994 14.6609 11.8269 14.3356 12.1523C13.7273 12.7606 12.87 13.0214 12.0797 13.0215C11.2894 13.0215 10.4321 12.7606 9.82384 12.1523C9.4984 11.8269 9.4984 11.2994 9.82384 10.974C10.1493 10.6486 10.6768 10.6485 11.0022 10.974C11.2273 11.1989 11.6202 11.3548 12.0797 11.3548C12.5392 11.3548 12.9322 11.1989 13.1572 10.974Z"></path>
+                                        <path d="M14.7913 7.81966C15.3664 7.82039 15.8318 8.28705 15.8313 8.86214C15.8306 9.43723 15.364 9.90285 14.7888 9.90218C14.2137 9.9016 13.7482 9.43482 13.7488 8.8597C13.7494 8.28458 14.2162 7.8191 14.7913 7.81966Z"></path>
+                                        <path d="M9.37543 7.81315C9.95079 7.81371 10.4169 8.28038 10.4163 8.85563C10.4157 9.43071 9.94895 9.89624 9.37381 9.89567C8.79875 9.89509 8.33245 9.42827 8.33295 8.85319C8.33372 8.27828 8.80075 7.81275 9.37543 7.81315Z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Top Bar -->
+        <div class="mobile-top-bar">
+            <div class="mobile-top-spacer"></div>
+            <a href="index.html" class="mobile-top-logo">
+                <img src="icons/logo.svg" width="28" height="32" alt="Threads">
+            </a>
+            <a href="login.html" class="mobile-login-btn" id="mobileLoginBtn">Log in</a>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Header -->
+                <header class="header">
+                    <a href="index.html" class="header-logo-link">
+                        <img src="icons/logo.svg" width="32" height="32" alt="Threads" class="header-logo">
+                    </a>
+                    <h1 id="headerTitle">Home</h1>
+                    <div class="feed-selector" id="feedSelector" style="display: none;">
+                        <button class="feed-selector-btn" id="feedSelectorBtn">
+                            <span>For you</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(90deg);">
+                                <polyline points="9 18 15 12 9 6"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <a href="login.html" class="login-btn-tablet" id="tabletLoginBtn">Log in</a>
+                </header>
+
+                <!-- Composer (shown when logged in) -->
+                <div class="composer" id="composer" style="display: none;">
+                    <img src="" alt="avatar" class="composer-avatar" id="composerAvatar">
+                    <input type="text" class="composer-input" id="composerInput" placeholder="What's new?">
+                    <button class="composer-post-btn" id="composerPostBtn">Post</button>
+                </div>
+
+                <!-- Feed -->
+                <div class="feed" id="feed">
+                </div>
+
+                <!-- Search View -->
+                <div class="search-view" id="searchView" style="display: none;">
+                    <div class="search-container">
+                        <div class="search-top-row">
+                        <div class="search-box-wrapper">
+                            <div class="search-box">
+                                <img src="icons/search.svg" width="20" height="20" alt="Search" class="search-icon">
+                                <div class="filter-tags" id="filterTags"></div>
+                                <input type="text" placeholder="Search" class="search-input" id="searchInput">
+                            </div>
+                            <div class="filter-wrapper">
+                                <button class="filter-btn" id="filterBtn">
+                                    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+                                        <path d="M11.3926 4.5166C10.5723 4.5166 9.86914 4.01855 9.56152 3.31543H1.64404C1.21191 3.31543 0.867676 2.94189 0.867676 2.52441C0.867676 2.09229 1.21191 1.72607 1.64404 1.72607H9.5542C9.86182 1.01562 10.5723 0.517578 11.3926 0.517578C12.2129 0.517578 12.916 1.01562 13.2236 1.72607H15.5381C15.9556 1.72607 16.2998 2.08496 16.2998 2.52441C16.2998 2.94922 15.9556 3.31543 15.5381 3.31543H13.2236C12.916 4.01855 12.2129 4.5166 11.3926 4.5166ZM11.3926 3.45459C11.9199 3.45459 12.3301 3.03711 12.3301 2.51709C12.3301 1.98242 11.9199 1.57959 11.3926 1.57959C10.8726 1.57959 10.4551 1.98242 10.4551 2.51709C10.4551 3.03711 10.8726 3.45459 11.3926 3.45459ZM1.62207 6.36963H4.03174C4.33936 5.6665 5.04248 5.16846 5.86279 5.16846C6.68311 5.16846 7.38623 5.6665 7.69385 6.36963H15.5161C15.9556 6.36963 16.2998 6.72852 16.2998 7.16064C16.2998 7.59277 15.9556 7.95898 15.5161 7.95898H7.69385C7.38623 8.66211 6.67578 9.16016 5.86279 9.16016C5.04248 9.16016 4.33203 8.66211 4.02441 7.95898H1.62207C1.21191 7.95898 0.867676 7.58545 0.867676 7.16064C0.867676 6.72852 1.21191 6.36963 1.62207 6.36963ZM5.86279 8.10547C6.39746 8.10547 6.80029 7.68066 6.80029 7.16064C6.80029 6.6333 6.39746 6.22314 5.86279 6.22314C5.34277 6.22314 4.92529 6.6333 4.92529 7.16064C4.92529 7.68066 5.34277 8.10547 5.86279 8.10547ZM11.3926 13.8037C10.5723 13.8037 9.86182 13.3057 9.5542 12.5952H1.64404C1.21191 12.5952 0.867676 12.229 0.867676 11.8042C0.867676 11.3721 1.21191 11.0132 1.64404 11.0132H9.5542C9.86914 10.3027 10.5723 9.80469 11.3926 9.80469C12.2129 9.80469 12.916 10.3027 13.2236 11.0132H15.5381C15.9556 11.0132 16.2998 11.3647 16.2998 11.8042C16.2998 12.2363 15.9556 12.5952 15.5381 12.5952H13.2236C12.916 13.3057 12.2129 13.8037 11.3926 13.8037ZM11.3926 12.7417C11.9199 12.7417 12.3301 12.3242 12.3301 11.8042C12.3301 11.2769 11.9199 10.8667 11.3926 10.8667C10.8726 10.8667 10.4551 11.2769 10.4551 11.8042C10.4551 12.3242 10.8726 12.7417 11.3926 12.7417Z"></path>
+                                    </svg>
+                                </button>
+                                <div class="filter-dropdown" id="filterDropdown">
+                                    <button class="filter-item" data-filter="after">
+                                        <span>After date</span>
+                                        <img src="icons/clock-after.svg" width="20" height="20" alt="After date">
+                                    </button>
+                                    <button class="filter-item" data-filter="before">
+                                        <span>Before date</span>
+                                        <img src="icons/clock-before.svg" width="20" height="20" alt="Before date">
+                                    </button>
+                                    <div class="filter-divider"></div>
+                                    <button class="filter-item" data-filter="profile">
+                                        <span>From profile...</span>
+                                        <img src="icons/profile-search.svg" width="20" height="20" alt="From profile">
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="search-cancel-btn" id="searchCancelBtn">Cancel</button>
+                        </div>
+                        <input type="date" id="datePicker" class="date-picker-hidden">
+                        <div class="calendar-picker" id="calendarPicker">
+                            <div class="calendar-header">
+                                <span class="calendar-month-year" id="calendarMonthYear"></span>
+                                <div class="calendar-nav">
+                                    <button class="calendar-nav-btn" id="calendarPrev">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"/>
+                                        </svg>
+                                    </button>
+                                    <button class="calendar-nav-btn" id="calendarNext">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="calendar-days-header">
+                                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                            </div>
+                            <div class="calendar-grid" id="calendarGrid"></div>
+                        </div>
+                    </div>
+                    <div class="search-results" id="searchResults">
+                    </div>
+                    <div class="search-footer">
+                        <span>&copy; 2026</span>
+                        <a href="#">Threads Terms</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Cookies Policy</a>
+                        <a href="#">Report a problem</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar -->
+        <aside class="right-sidebar">
+            <!-- Login Box -->
+            <div class="login-box" id="loginBox">
+                <h2>Log in or sign up for Threads</h2>
+                <p>See what people are talking about and join the conversation.</p>
+                <button class="instagram-btn-sidebar" id="showLoginBtn">
+                    <img src="icons/instagram-white.svg" width="24" height="24" alt="instagram">
+                    <span>Continue with Instagram</span>
+                </button>
+                <a href="login.html" class="username-login-link" id="showUsernameLoginBtn">Log in with username instead</a>
+            </div>
+            <div class="login-box-footer">
+                <span>&copy; 2026</span>
+                <a href="#">Threads Terms</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Cookies Policy</a>
+                <a href="#">Report a problem</a>
+            </div>
+
+            <!-- User Profile Box (shown when logged in) -->
+            <div class="user-box" id="userBox" style="display: none;">
+                <img src="" alt="avatar" class="user-box-avatar" id="userBoxAvatar">
+                <h2 id="userBoxName"></h2>
+                <p id="userBoxUsername"></p>
+                <button class="logout-btn" id="logoutBtn">Log out</button>
+            </div>
+
+        </aside>
+
+        <!-- Login Modal -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <button class="modal-close-btn" id="modalCloseBtn">
+                    <svg aria-label="Close button" role="img" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="21" x2="3" y1="3" y2="21"></line>
+                        <line x1="21" x2="3" y1="21" y2="3"></line>
+                    </svg>
+                </button>
+                <!-- Action Prompt -->
+                <div class="modal-content" id="actionPrompt">
+                    <div class="gradient-heart">
+                        <img src="icons/heart-gradient.svg" width="48" height="48" alt="heart">
+                    </div>
+                    <h2>Like this? You'll love Threads.</h2>
+                    <p class="prompt-subtitle">Sign up to like, reply and more.</p>
+                    <button class="instagram-btn" id="continueInstagram">
+                        <img src="icons/instagram-color.svg" width="44" height="44" alt="instagram" class="instagram-icon-gradient">
+                        <span>Continue with Instagram</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Comment Prompt -->
+                <div class="modal-content" id="commentPrompt" style="display: none;">
+                    <div class="gradient-heart">
+                        <img src="icons/comment-gradient.svg" width="48" height="48" alt="comment">
+                    </div>
+                    <h2>Sign up to chime in</h2>
+                    <p class="prompt-subtitle">You're one step away from joining the conversation.</p>
+                    <button class="instagram-btn" id="continueInstagramComment">
+                        <img src="icons/instagram-color.svg" width="44" height="44" alt="instagram" class="instagram-icon-gradient">
+                        <span>Continue with Instagram</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Repost Prompt -->
+                <div class="modal-content" id="repostPrompt" style="display: none;">
+                    <div class="gradient-heart">
+                        <img src="icons/repost-gradient.svg" width="48" height="48" alt="repost">
+                    </div>
+                    <h2>Sign up to spread the word</h2>
+                    <p class="prompt-subtitle">You're one step closer to sparking conversations.</p>
+                    <button class="instagram-btn" id="continueInstagramRepost">
+                        <img src="icons/instagram-color.svg" width="44" height="44" alt="instagram" class="instagram-icon-gradient">
+                        <span>Continue with Instagram</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Share Prompt -->
+                <div class="modal-content" id="sharePrompt" style="display: none;">
+                    <h2>Say more with Threads</h2>
+                    <p class="prompt-subtitle">Join Threads to share thoughts, find out what's going on, follow your people and more.</p>
+                    <button class="instagram-btn" id="continueInstagramShare">
+                        <img src="icons/instagram-color.svg" width="44" height="44" alt="instagram" class="instagram-icon-gradient">
+                        <span>Continue with Instagram</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Post Prompt -->
+                <div class="modal-content" id="postPrompt" style="display: none;">
+                    <div class="gradient-heart">
+                        <img src="icons/create-gradient.svg" width="48" height="48" alt="create">
+                    </div>
+                    <h2>Sign up to post</h2>
+                    <p class="prompt-subtitle">Join Threads to share ideas, ask questions, post random thoughts and more.</p>
+                    <button class="instagram-btn" id="continueInstagramPost">
+                        <img src="icons/instagram-color.svg" width="44" height="44" alt="instagram" class="instagram-icon-gradient">
+                        <span>Continue with Instagram</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="arrow-icon">
+                            <polyline points="9 18 15 12 9 6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Login Form -->
+                <div class="modal-content" id="loginForm" style="display: none;">
+                    <h2>Log in</h2>
+                    <div class="form-group">
+                        <input type="text" id="loginUsername" placeholder="Username" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="loginPassword" placeholder="Password" class="form-input">
+                    </div>
+                    <button class="form-btn" id="loginSubmit">Log in</button>
+                </div>
+
+                <!-- Create Post Form -->
+                <div class="modal-content create-post-modal" id="createPostForm" style="display: none;">
+                    <div class="create-post-header">
+                        <button class="create-post-close" id="createPostClose">&times;</button>
+                        <h2>New thread</h2>
+                        <button class="post-btn" id="createPostSubmit">Post</button>
+                    </div>
+                    <div class="create-post-body">
+                        <div class="create-post-user">
+                            <img src="" alt="avatar" class="create-post-avatar" id="createPostAvatar">
+                            <div class="create-post-line"></div>
+                        </div>
+                        <div class="create-post-content">
+                            <span class="create-post-username" id="createPostUsername"></span>
+                            <textarea class="create-post-textarea" id="createPostText" placeholder="Start a thread..." maxlength="2200"></textarea>
+                            <div class="create-post-image-preview" id="createPostImagePreview" style="display: none;">
+                                <img src="" alt="preview" id="createPostPreviewImg">
+                                <button class="remove-image-btn" id="removeImageBtn">&times;</button>
+                            </div>
+                            <div class="create-post-actions">
+                                <label class="add-image-btn" id="addImageBtn">
+                                    <img src="icons/image.svg" width="20" height="20" alt="Add image">
+                                    <input type="file" accept="image/*" id="createPostImage" style="display: none;">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Action Button -->
+        <button class="fab" id="fab" style="display: none;">
+            <img src="icons/create.svg" width="24" height="24" alt="Create">
+        </button>
+
+        <!-- Toast Notification -->
+        <div class="toast" id="toast">
+            <span class="toast-message" id="toastMessage"></span>
+        </div>
+
+        <!-- Report Problem Modal -->
+        <div class="report-modal-overlay" id="reportModalOverlay">
+            <button class="report-modal-close" id="reportModalClose">
+                <svg viewBox="0 0 24 24" fill="#fff" width="18" height="18"><path d="M18.293 4.293a1 1 0 1 1 1.414 1.414L13.414 12l6.293 6.293a1 1 0 1 1-1.414 1.414L12 13.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L10.586 12 4.293 5.707a1 1 0 1 1 1.414-1.414L12 10.586l6.293-6.293z"></path></svg>
+            </button>
+            <div class="report-modal">
+                <h2 class="report-modal-title">Report a problem</h2>
+                <div class="report-modal-content">
+                    <textarea class="report-textarea" id="reportTextarea" placeholder="Please include as many details as possible..."></textarea>
+                    <div class="report-modal-footer">
+                        <input type="file" id="reportFileInput" class="report-file-input" accept="image/*" multiple>
+                        <button class="report-attach-btn" id="reportAttachBtn">
+                            <svg width="20" height="20" viewBox="0 0 20 20"><path d="M13.9455 9.0196L8.49626 14.4688C7.16326 15.8091 5.38347 15.692 4.23357 14.5347C3.07634 13.3922 2.9738 11.6197 4.30681 10.2794L11.7995 2.78669C12.5392 2.04694 13.6745 1.85651 14.4289 2.60358C15.1833 3.3653 14.9855 4.4859 14.2458 5.22565L6.83367 12.6524C6.57732 12.9088 6.28435 12.8355 6.10124 12.6671C5.94011 12.4986 5.87419 12.1983 6.12322 11.942L11.2868 6.78571C11.6091 6.45612 11.6164 5.97272 11.3088 5.65778C10.9938 5.35749 10.5031 5.35749 10.1808 5.67975L4.99529 10.8653C4.13835 11.7296 4.1823 13.0626 4.95134 13.8316C5.77898 14.6592 7.03874 14.6446 7.903 13.7803L15.3664 6.32428C16.8678 4.81549 16.8312 2.83063 15.4909 1.4903C14.1799 0.179264 12.1584 0.106021 10.6496 1.60749L3.10564 9.16608C1.16472 11.1143 1.27458 13.9268 3.06169 15.7139C4.8488 17.4937 7.6613 17.6109 9.60955 15.6773L15.1027 10.1841C15.4103 9.87653 15.4103 9.30524 15.0881 9.00495C14.7878 8.68268 14.2677 8.70465 13.9455 9.0196Z" fill="#737373"></path></svg>
+                        </button>
+                        <button class="report-submit-btn" id="reportSubmitBtn">
+                            <span class="report-submit-text">Submit</span>
+                            <span class="report-submit-spinner"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="security.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

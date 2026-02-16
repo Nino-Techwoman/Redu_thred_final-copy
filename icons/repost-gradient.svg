@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="repostGradient" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F77737"/>
+      <stop offset="50%" stop-color="#E1306C"/>
+      <stop offset="100%" stop-color="#C13584"/>
+    </linearGradient>
+  </defs>
+  <polyline points="17 1 21 5 17 9" stroke="url(#repostGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M3 11V9a4 4 0 0 1 4-4h14" stroke="url(#repostGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <polyline points="7 23 3 19 7 15" stroke="url(#repostGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M21 13v2a4 4 0 0 1-4 4H3" stroke="url(#repostGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

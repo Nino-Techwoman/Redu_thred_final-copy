@@ -1,0 +1,434 @@
+/* Login Page Styles */
+
+:root {
+  --threads-mobile-padding: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #101010;
+    min-height: 100vh;
+}
+
+
+
+.login-page {
+    min-height: 100vh;
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 480px;
+    min-height: 455px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+h1 {
+    width: 100%;
+    max-width: 480px;
+    color: #f5f5f5;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 21px;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+
+
+#loginPageForm {
+    width: 100%;
+    max-width: 480px;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    height: 56px;
+    background-color: #1e1e1e;
+    border: none;
+    border-radius: 12px;
+    color: #f5f5f5;
+    font-size: 15px;
+    padding: 0 16px;
+    outline: none;
+}
+
+.form-input::placeholder {
+    color: #737373;
+}
+
+.form-input:focus {
+    background-color: #2a2a2a;
+}
+
+
+
+.login-btn {
+    width: 100%;
+    height: 56px;
+    background-color: #fff;
+    border: none;
+    border-radius: 12px;
+    color: #000;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    padding: 0 16px;
+    text-align: center;
+}
+
+.login-btn:hover {
+    background-color: #e0e0e0;
+}
+
+
+
+.forgot-link {
+    display: block;
+    margin-top: 16px;
+    color: #737373;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-link:hover {
+    color: #f5f5f5;
+}
+
+
+
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 480px;
+    margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+.divider::before {
+    content: "";
+    width: 80px;
+    height: 0.5px;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.divider::after {
+    content: "";
+    width: 80px;
+    height: 0.5px;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.divider span {
+    padding-left: 16px;
+    padding-right: 16px;
+    color: #737373;
+    font-size: 13px;
+}
+
+
+
+.instagram-btn {
+    width: 100%;
+    max-width: 480px;
+    height: 87px;
+    background-color: #1e1e1e;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    color: #f5f5f5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    font-size: 24px;
+}
+
+.instagram-btn:hover {
+    background-color: #2a2a2a;
+}
+
+.instagram-btn img {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+}
+
+.instagram-btn span {
+    color: #f5f5f5;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.instagram-btn .arrow-icon {
+    color: #c7c7c7;
+    width: 24px;
+    height: 24px;
+}
+
+
+
+.qr-container {
+    position: fixed;
+    right: 100px;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.threads-logo {
+    width: 80px;
+    height: 80px;
+}
+
+.qr-section {
+    text-align: center;
+}
+
+.qr-section p {
+    font-size: 14px;
+    color: #737373;
+    margin-bottom: 12px;
+}
+
+.qr-box {
+    background-color: #1e1e1e;
+    border: 0.5px solid rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    box-shadow: 0px 10.5px 21px 0px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    cursor: pointer;
+}
+
+.qr-box:hover {
+    transform: scale(1.05);
+}
+
+.qr-code {
+    width: 160px;
+    height: 160px;
+    display: block;
+    filter: invert(1);
+}
+
+
+
+.footer {
+    position: fixed;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px 12px;
+}
+
+.footer span {
+    color: #737373;
+    font-size: 12px;
+}
+
+.footer a {
+    color: #737373;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+
+/* Light Mode */
+
+[data-theme="light"] body {
+    background-color: #fff;
+}
+
+[data-theme="light"] .login-page {
+    background-color: #fff;
+}
+
+[data-theme="light"] h1 {
+    color: #000;
+}
+
+[data-theme="light"] .form-input {
+    background-color: #f5f5f5;
+    color: #000;
+    border: none;
+}
+
+[data-theme="light"] .form-input:focus {
+    background-color: #eee;
+}
+
+[data-theme="light"] .login-btn {
+    background-color: #000;
+    color: #fff;
+}
+
+[data-theme="light"] .login-btn:hover {
+    background-color: #262626;
+}
+
+[data-theme="light"] .forgot-link:hover {
+    color: #000;
+}
+
+[data-theme="light"] .divider::before {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .divider::after {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .instagram-btn {
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    color: #000;
+}
+
+[data-theme="light"] .instagram-btn:hover {
+    background-color: #fafafa;
+}
+
+[data-theme="light"] .instagram-btn span {
+    color: #000;
+}
+
+[data-theme="light"] .qr-box {
+    background-color: #fff;
+    border: 0.5px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 10.5px 21px 0px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .qr-code {
+    filter: none;
+}
+
+
+/* Tablet */
+
+@media (max-width: 900px) {
+    .qr-container {
+        display: none;
+    }
+
+    .footer {
+        position: relative;
+        margin-top: 40px;
+        bottom: auto;
+    }
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+    .login-page {
+        justify-content: flex-start;
+        padding: 60px var(--threads-mobile-padding) var(--threads-mobile-padding);
+    }
+
+    .login-container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .form-input {
+        font-size: 14px;
+        width: 100%;
+        max-width: 370px;
+        height: 55px;
+        border-radius: 20px;
+        padding: 0 24px;
+    }
+
+    .login-btn {
+        width: 100%;
+        max-width: 370px;
+        height: 55px;
+        border-radius: 20px;
+        font-size: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .divider {
+        max-width: 370px;
+    }
+
+    .instagram-btn {
+        width: 100%;
+        max-width: 370px;
+    }
+
+    .footer {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin-top: auto;
+        padding-top: 40px;
+    }
+}
+
+
+/* Small Mobile */
+
+@media (max-width: 480px) {
+    .login-page {
+        padding: var(--threads-mobile-padding);
+    }
+
+    .divider::before,
+    .divider::after {
+        width: 60px;
+    }
+
+    .instagram-btn {
+        height: auto;
+        padding: 16px;
+    }
+
+    .footer {
+        gap: 4px 8px;
+    }
+}

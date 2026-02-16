@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; script-src 'self' 'unsafe-inline';">
+    <title>Login - Threads</title>
+    <link rel="stylesheet" href="login.css">
+    <script>
+        (function() {
+            let raw = localStorage.getItem('threads_theme');
+            let savedTheme = 'auto';
+            if (raw) savedTheme = JSON.parse(raw);
+            if (savedTheme == 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else if (savedTheme == 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                }
+            }
+        })();
+    </script>
+</head>
+<body>
+    <div class="login-page">
+        <!-- Center - Login Form -->
+        <div class="login-container">
+            <h1>Log in with your Instagram account</h1>
+
+            <form id="loginPageForm">
+                <div class="form-group">
+                    <input type="text" id="loginUsername" placeholder="Username, phone number or email address" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" class="form-input" required>
+                </div>
+                <button type="submit" class="login-btn">Log in</button>
+            </form>
+
+            <a href="#" class="forgot-link">Forgotten password?</a>
+
+            <div class="divider">
+                <span>or</span>
+            </div>
+
+            <button class="instagram-btn" id="continueInstagram">
+                <img src="icons/instagram-color.svg" alt="Instagram">
+                <span>Continue with Instagram</span>
+                <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Right side - QR Code (fixed position) -->
+        <div class="qr-container">
+            <div class="qr-section">
+                <p>Scan to get the app</p>
+                <div class="qr-box">
+                    <img src="images/qr-code.png" alt="QR Code" class="qr-code">
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <span>© 2026</span>
+            <a href="#">Threads Terms</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Cookies Policy</a>
+            <a href="#">Report a problem</a>
+        </footer>
+    </div>
+
+    <script>
+        // load saved theme
+        let raw = localStorage.getItem('threads_theme');
+        let savedTheme = 'auto';
+        if (raw) {
+            savedTheme = JSON.parse(raw);
+        }
+        if (savedTheme == 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+        } else if (savedTheme == 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            if (!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.setAttribute('data-theme', 'light');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        }
+    </script>
+    <script src="security.js"></script>
+    <script>
+        // login functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            let loginRateLimiter = createRateLimiter(5, 30000); // 5 attempts, 30s lockout
+            let errorEl = null;
+
+            function showError(msg) {
+                if (errorEl == null) {
+                    errorEl = document.createElement('p');
+                    errorEl.style.color = '#ed4956';
+                    errorEl.style.fontSize = '14px';
+                    errorEl.style.marginTop = '8px';
+                    errorEl.style.textAlign = 'center';
+                    let form = document.getElementById('loginPageForm');
+                    form.insertBefore(errorEl, form.querySelector('.login-btn'));
+                }
+                errorEl.textContent = msg;
+            }
+
+            // login form submit
+            document.getElementById('loginPageForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // check rate limit
+                let rateCheck = loginRateLimiter.check();
+                if (rateCheck.allowed == false) {
+                    showError(rateCheck.message);
+                    return;
+                }
+
+                let username = sanitize(document.getElementById('loginUsername').value.trim());
+                let password = document.getElementById('loginPassword').value;
+
+                if (username == null || username == '') {
+                    showError('Please enter a username.');
+                    return;
+                }
+                if (password == null || password == '' || password.length < 1) {
+                    showError('Please enter a password.');
+                    return;
+                }
+
+                loginUser(username);
+            });
+
+            // continue with instagram button
+            document.getElementById('continueInstagram').addEventListener('click', function() {
+                window.location.href = 'continue.html';
+            });
+
+            function loginUser(username) {
+                // create user object
+                let user = {
+                    id: Math.floor(Math.random() * 90000) + 10000,
+                    username: username,
+                    // make first letter uppercase
+                    name: username.charAt(0).toUpperCase() + username.slice(1),
+                    avatar: 'images/avatar' + (Math.floor(Math.random() * 5) + 1) + '.jpg'
+                };
+
+                // save to localstorage
+                localStorage.setItem('threads_user', JSON.stringify(user));
+                localStorage.setItem('threads_is_logged_in', 'true');
+
+                // go to main page
+                window.location.href = 'home.html';
+            }
+        });
+    </script>
+</body>
+</html>
